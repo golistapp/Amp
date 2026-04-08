@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AMP KART — Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── TOKENS ───────────────────────────────────────────── */
+    :root {
+      --y:       #FFD600;
+      --yd:      #E6C000;
+      --yg:      rgba(255,214,0,.13);
+      --blk:     #000000;
+      --wht:     #FFFFFF;
+      --blu:     #1E3A8A;
+      --blu2:    #2D52C4;
+      --bg:      #F0F1F5;
+      --card:    #FFFFFF;
+      --bdr:     #E2E4EC;
+      --txt:     #0F1117;
+      --muted:   #6B7280;
+      --r:       12px;
+      --rsm:     8px;
+      --sh:      0 1px 6px rgba(0,0,0,.07);
+      --shh:     0 6px 24px rgba(0,0,0,.12);
+      --hdr:     56px;
+      --f:       'Poppins', sans-serif;
+      --ease:    .2s cubic-bezier(.4,0,.2,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--f);
+      background: var(--bg);
+      color: var(--txt);
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-size: 13px;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: var(--f); cursor: pointer; border: none; outline: none; }
+
+    /* ─── HEADER ───────────────────────────────────────────── */
+    .hdr {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: var(--hdr);
+      background: var(--blk);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 16px;
+      border-bottom: 2px solid var(--y);
+    }
+    .hdr-left { display: flex; align-items: center; gap: 10px; }
+    .logo-img {
+      height: 34px; width: 34px;
+      border-radius: var(--rsm);
+      object-fit: cover;
+      background: var(--y);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; color: var(--blk);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .logo-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .logo-img .fallback { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+    .brand-name {
+      font-size: 17px; font-weight: 800;
+      color: var(--y); letter-spacing: 1.5px;
+    }
+    .brand-sub {
+      font-size: 8.5px; color: rgba(255,255,255,.38);
+      letter-spacing: .4px; text-transform: uppercase;
+    }
+    .badge-int {
+      font-size: 9px; font-weight: 600;
+      background: rgba(255,214,0,.1);
+      border: 1px solid rgba(255,214,0,.3);
+      color: var(--y); padding: 3px 9px;
+      border-radius: 20px; letter-spacing: .3px;
+    }
+
+    /* ─── LAYOUT ───────────────────────────────────────────── */
+    .page { padding-top: calc(var(--hdr) + 14px); padding-bottom: 48px; }
+    .wrap { max-width: 1060px; margin: 0 auto; padding: 0 14px; }
+
+    /* ─── HERO / CONTROL PANEL ─────────────────────────────── */
+    .hero {
+      background: var(--blk);
+      border-radius: var(--r);
+      padding: 18px 18px;
+      margin-bottom: 14px;
+      display: flex; flex-direction: column; gap: 14px;
+      position: relative; overflow: hidden;
+      animation: fadeUp .4s ease both;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -50px; right: -50px;
+      width: 180px; height: 180px;
+      background: radial-gradient(circle, rgba(255,214,0,.14) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-top {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 12px;
+    }
+    .hero-info { flex: 1; }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--yg);
+      border: 1px solid rgba(255,214,0,.25);
+      color: var(--y); font-size: 9px; font-weight: 600;
+      padding: 3px 9px; border-radius: 20px;
+      letter-spacing: .5px; text-transform: uppercase;
+      margin-bottom: 7px;
+    }
+    .hero-tag-dot { width: 5px; height: 5px; background: var(--y); border-radius: 50%; animation: pulse 2s infinite; }
+    .hero-title {
+      font-size: clamp(26px,6vw,38px);
+      font-weight: 800; color: var(--wht);
+      letter-spacing: -.3px; line-height: 1;
+      margin-bottom: 4px;
+    }
+    .hero-title span { color: var(--y); }
+    .hero-sub {
+      font-size: 11px; color: rgba(255,255,255,.42);
+      font-weight: 400; line-height: 1.5;
+    }
+
+    /* METRICS GRID */
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    @media(min-width:560px) { .metrics { grid-template-columns: repeat(4,1fr); } }
+    .metric {
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--rsm);
+      padding: 10px 12px;
+      display: flex; flex-direction: column; gap: 3px;
+    }
+    .metric-lbl {
+      font-size: 9px; font-weight: 500;
+      color: rgba(255,255,255,.4); letter-spacing: .3px;
+      text-transform: uppercase;
+    }
+    .metric-val {
+      font-size: 20px; font-weight: 700;
+      color: var(--y); line-height: 1;
+    }
+    .metric-val.white { color: var(--wht); }
+    .metric-delta {
+      font-size: 9px; font-weight: 500; color: #10b981;
+    }
+
+    /* ─── SECTION LABEL ────────────────────────────────────── */
+    .sec-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .sec-title {
+      font-size: 12px; font-weight: 700;
+      color: var(--txt); letter-spacing: .3px;
+      text-transform: uppercase;
+    }
+    .sec-count {
+      font-size: 10px; font-weight: 600; color: var(--muted);
+      background: var(--bdr); padding: 2px 9px; border-radius: 20px;
+    }
+
+    /* ─── RECENT ACTIVITY ──────────────────────────────────── */
+    .activity-box {
+      background: var(--card);
+      border: 1.5px solid var(--bdr);
+      border-radius: var(--r);
+      padding: 14px 16px;
+      margin-bottom: 14px;
+      animation: fadeUp .4s .08s ease both;
+    }
+    .activity-list { display: flex; flex-direction: column; gap: 0; }
+    .act-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--bdr);
+      transition: var(--ease);
+    }
+    .act-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .act-item:first-child { padding-top: 0; }
+    .act-icon {
+      width: 30px; height: 30px; flex-shrink: 0;
+      background: var(--bg);
+      border-radius: var(--rsm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .act-info { flex: 1; min-width: 0; }
+    .act-name {
+      font-size: 12px; font-weight: 600; color: var(--txt);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .act-time { font-size: 10px; color: var(--muted); }
+    .act-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--y); flex-shrink: 0;
+    }
+    .act-empty {
+      text-align: center; padding: 18px 0;
+      font-size: 12px; color: var(--muted);
+    }
+    .act-empty span { display: block; font-size: 24px; margin-bottom: 6px; }
+
+    /* ─── QUICK ACCESS GRID ────────────────────────────────── */
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+      animation: fadeUp .4s .12s ease both;
+    }
+    @media(min-width:680px) { .quick-grid { grid-template-columns: repeat(4,1fr); } }
+    .q-btn {
+      background: var(--card);
+      border: 1.5px solid var(--bdr);
+      border-radius: var(--r);
+      padding: 11px 12px;
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 600; color: var(--txt);
+      transition: var(--ease);
+      cursor: pointer;
+    }
+    .q-btn .qi { font-size: 16px; }
+    .q-btn:hover {
+      border-color: var(--y);
+      background: var(--yg);
+      transform: translateY(-1px);
+      box-shadow: var(--shh);
+    }
+    .q-btn.ql { background: var(--blk); color: var(--y); border-color: var(--blk); }
+    .q-btn.ql:hover { border-color: var(--y); }
+
+    /* ─── TOOL GRID ────────────────────────────────────────── */
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    @media(min-width:560px) { .tool-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media(min-width:860px) { .tool-grid { grid-template-columns: repeat(4, 1fr); } }
+
+    /* ─── TOOL CARD (COMPACT) ──────────────────────────────── */
+    .tc {
+      background: var(--card);
+      border: 1.5px solid var(--bdr);
+      border-radius: var(--r);
+      padding: 14px 13px;
+      display: flex; flex-direction: column; gap: 10px;
+      position: relative; overflow: hidden;
+      transition: var(--ease);
+      cursor: pointer;
+    }
+    .tc::after {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2.5px;
+      background: var(--y);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform var(--ease);
+    }
+    .tc.blue-top::after { background: var(--blu); }
+    .tc:hover {
+      box-shadow: var(--shh);
+      border-color: rgba(255,214,0,.35);
+      transform: translateY(-2px);
+    }
+    .tc:hover::after { transform: scaleX(1); }
+
+    .tc-top { display: flex; align-items: center; justify-content: space-between; }
+    .tc-icon {
+      width: 36px; height: 36px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .ic-y  { background: rgba(255,214,0,.14); }
+    .ic-b  { background: rgba(30,58,138,.1); }
+    .ic-g  { background: rgba(16,185,129,.1); }
+    .ic-o  { background: rgba(249,115,22,.1); }
+    .ic-p  { background: rgba(139,92,246,.1); }
+    .ic-r  { background: rgba(239,68,68,.1); }
+
+    .tc-name {
+      font-size: 13px; font-weight: 700;
+      color: var(--txt); line-height: 1.2;
+    }
+    .tc-footer {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .badge {
+      font-size: 9px; font-weight: 600;
+      padding: 3px 7px; border-radius: 20px;
+      letter-spacing: .2px;
+    }
+    .b-live  { background: rgba(16,185,129,.12); color: #059669; }
+    .b-beta  { background: rgba(30,58,138,.12);  color: var(--blu); }
+    .b-soon  { background: rgba(249,115,22,.1);  color: #d97706; }
+
+    .open-btn {
+      font-size: 10px; font-weight: 700;
+      background: var(--blk); color: var(--y);
+      padding: 5px 11px; border-radius: 6px;
+      letter-spacing: .3px; transition: var(--ease);
+      text-transform: uppercase;
+    }
+    .open-btn:hover { background: var(--y); color: var(--blk); }
+
+    /* card stagger */
+    .tc:nth-child(1) { animation: fadeUp .4s .14s ease both; }
+    .tc:nth-child(2) { animation: fadeUp .4s .18s ease both; }
+    .tc:nth-child(3) { animation: fadeUp .4s .22s ease both; }
+    .tc:nth-child(4) { animation: fadeUp .4s .26s ease both; }
+    .tc:nth-child(5) { animation: fadeUp .4s .30s ease both; }
+    .tc:nth-child(6) { animation: fadeUp .4s .34s ease both; }
+    .tc:nth-child(7) { animation: fadeUp .4s .38s ease both; }
+    .tc:nth-child(8) { animation: fadeUp .4s .42s ease both; }
+
+    /* ─── FOOTER ───────────────────────────────────────────── */
+    .footer {
+      text-align: center; margin-top: 40px;
+      padding-top: 20px; border-top: 1px solid var(--bdr);
+      font-size: 11px; color: #bbb;
+    }
+    .footer strong { color: var(--muted); font-weight: 600; }
+
+    /* ─── TOAST ────────────────────────────────────────────── */
+    .toast {
+      position: fixed; bottom: 20px; left: 50%;
+      transform: translateX(-50%) translateY(70px);
+      background: var(--blk); color: var(--y);
+      font-size: 12px; font-weight: 600;
+      padding: 10px 20px; border-radius: 30px;
+      border: 1.5px solid rgba(255,214,0,.4);
+      z-index: 999; white-space: nowrap;
+      transition: transform .3s cubic-bezier(.4,0,.2,1);
+      pointer-events: none;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ─── KEYFRAMES ────────────────────────────────────────── */
+    @keyframes pulse {
+      0%,100% { opacity:1; transform:scale(1); }
+      50%      { opacity:.4; transform:scale(1.4); }
+    }
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(12px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* ─── SCROLLBAR ────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-thumb { background: var(--bdr); border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+  <!-- ── HEADER ───────────────────────────────────────────── -->
+  <header class="hdr">
+    <div class="hdr-left">
+      <div class="logo-img" id="logoBox">
+        <img src="photo/logo.png" alt="AMP KART"
+             onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';" />
+        <span class="fallback" id="logoFallback" style="display:none;">AK</span>
+      </div>
+      <div>
+        <div class="brand-name">AMP KART</div>
+        <div class="brand-sub">Advanced Market Platform</div>
+      </div>
+    </div>
+    <span class="badge-int">● Internal</span>
+  </header>
+
+  <!-- ── PAGE ─────────────────────────────────────────────── -->
+  <main class="page">
+    <div class="wrap">
+
+      <!-- HERO / CONTROL PANEL -->
+      <section class="hero">
+        <div class="hero-top">
+          <div class="hero-info">
+            <div class="hero-tag"><span class="hero-tag-dot"></span> Control Panel</div>
+            <h1 class="hero-title">DASH<span>BOARD</span></h1>
+            <p class="hero-sub">Manage tools &amp; operations</p>
+          </div>
+        </div>
+        <div class="metrics">
+          <div class="metric">
+            <span class="metric-lbl">Orders Today</span>
+            <span class="metric-val white" id="m-orders">—</span>
+            <span class="metric-delta">Live data</span>
+          </div>
+          <div class="metric">
+            <span class="metric-lbl">Revenue Today</span>
+            <span class="metric-val" id="m-revenue">—</span>
+            <span class="metric-delta">Live data</span>
+          </div>
+          <div class="metric">
+            <span class="metric-lbl">Profit Today</span>
+            <span class="metric-val" id="m-profit">—</span>
+            <span class="metric-delta">Live data</span>
+          </div>
+          <div class="metric">
+            <span class="metric-lbl">Active Tools</span>
+            <span class="metric-val white">3</span>
+            <span class="metric-delta">of 8 total</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- RECENT ACTIVITY -->
+      <section class="activity-box">
+        <div class="sec-head">
+          <span class="sec-title">Recent Activity</span>
+          <button onclick="clearActivity()" style="font-size:10px;background:none;color:var(--muted);padding:0;font-family:var(--f);cursor:pointer;">Clear all</button>
+        </div>
+        <div class="activity-list" id="activityList">
+          <div class="act-empty"><span>🕒</span>No recent activity</div>
+        </div>
+      </section>
+
+      <!-- QUICK ACCESS -->
+      <div class="sec-head">
+        <span class="sec-title">Quick Access</span>
+      </div>
+      <div class="quick-grid">
+        <button class="q-btn ql" onclick="openTool('Calculator','🧮','/calculator.html')">
+          <span class="qi">🧮</span> Calculator
+        </button>
+        <button class="q-btn" onclick="openTool('QR Generator','📱','/qr.html')">
+          <span class="qi">📱</span> QR Generator
+        </button>
+        <button class="q-btn" onclick="openTool('Compressor','🗜️','/compressor.html')">
+          <span class="qi">🗜️</span> Compressor
+        </button>
+        <button class="q-btn" onclick="openTool('Profit Analyzer','📊','/profit.html')">
+          <span class="qi">📊</span> Profit Analyzer
+        </button>
+      </div>
+
+      <!-- ALL TOOLS -->
+      <div class="sec-head" style="margin-top:6px;">
+        <span class="sec-title">All Tools</span>
+        <span class="sec-count">8 tools</span>
+      </div>
+
+      <div class="tool-grid">
+
+        <div class="tc" onclick="openTool('Calculator','🧮','/calculator.html')">
+          <div class="tc-top">
+            <div class="tc-icon ic-y">🧮</div>
+            <span class="badge b-live">● Live</span>
+          </div>
+          <span class="tc-name">Pricing Calculator</span>
+          <div class="tc-footer">
+            <button class="open-btn" onclick="openTool('Calculator','🧮','/calculator.html');event.stopPropagation()">Open</button>
+          </div>
+        </div>
+
+        <div class="tc blue-top" onclick="openTool('Compressor','🗜️','/compressor.html')">
+          <div class="tc-top">
+            <div class="tc-icon ic-b">🗜️</div>
+            <span class="badge b-live">● Live</span>
+          </div>
+          <span class="tc-name">Image Compressor</span>
+          <div class="tc-footer">
+            <button class="open-btn" onclick="openTool('Compressor','🗜️','/compressor.html');event.stopPropagation()">Open</button>
+          </div>
+        </div>
+
+        <div class="tc" onclick="openTool('QR Generator','📱','/qr.html')">
+          <div class="tc-top">
+            <div class="tc-icon ic-g">📱</div>
+            <span class="badge b-live">● Live</span>
+          </div>
+          <span class="tc-name">QR Generator</span>
+          <div class="tc-footer">
+            <button class="open-btn" onclick="openTool('QR Generator','📱','/qr.html');event.stopPropagation()">Open</button>
+          </div>
+        </div>
+
+        <div class="tc" onclick="openTool('Profit Analyzer','📊','/profit.html')">
+          <div class="tc-top">
+            <div class="tc-icon ic-o">📊</div>
+            <span class="badge b-beta">⬡ Beta</span>
+          </div>
+          <span class="tc-name">Profit Analyzer</span>
+          <div class="tc-footer">
+            <button class="open-btn" onclick="openTool('Profit Analyzer','📊','/profit.html');event.stopPropagation()">Open</button>
+          </div>
+        </div>
+
+        <div class="tc blue-top" onclick="showToast('Order Tracker — Coming Soon!')">
+          <div class="tc-top">
+            <div class="tc-icon ic-b">📦</div>
+            <span class="badge b-soon">◌ Soon</span>
+          </div>
+          <span class="tc-name">Order Tracker</span>
+          <div class="tc-footer">
+            <button class="open-btn" onclick="showToast('Order Tracker — Coming Soon!');event.stopPropagation()">Open</button>
+          </div>
+        </div>
+
+        <div class="tc" onclick="showToast('Product Manager — Coming Soon!')">
+          <div class="tc-top">
+            <div class="tc-icon ic-p">🏷️</div>
+            <span class="badge b-soon">◌ Soon</span>
+          </div>
+          <span class="tc-name">Product Manager</span>
+          <div class="tc-footer">
+            <button class="open-btn" onclick="showToast('Product Manager — Coming Soon!');event.stopPropagation()">Open</button>
+          </div>
+        </div>
+
+        <div class="tc" onclick="showToast('Invoice Builder — Coming Soon!')">
+          <div class="tc-top">
+            <div class="tc-icon ic-g">🧾</div>
+            <span class="badge b-soon">◌ Soon</span>
+          </div>
+          <span class="tc-name">Invoice Builder</span>
+          <div class="tc-footer">
+            <button class="open-btn" onclick="showToast('Invoice Builder — Coming Soon!');event.stopPropagation()">Open</button>
+          </div>
+        </div>
+
+        <div class="tc blue-top" onclick="showToast('Sales Reports — Coming Soon!')">
+          <div class="tc-top">
+            <div class="tc-icon ic-r">📈</div>
+            <span class="badge b-soon">◌ Soon</span>
+          </div>
+          <span class="tc-name">Sales Reports</span>
+          <div class="tc-footer">
+            <button class="open-btn" onclick="showToast('Sales Reports — Coming Soon!');event.stopPropagation()">Open</button>
+          </div>
+        </div>
+
+      </div><!-- /tool-grid -->
+
+    </div><!-- /wrap -->
+  </main>
+
+  <!-- ── FOOTER ────────────────────────────────────────────── -->
+  <footer class="footer">
+    <strong>AMP KART INTERNAL SYSTEM</strong> &nbsp;·&nbsp; v2.0.0 &nbsp;·&nbsp; © 2025 AMP KART
+  </footer>
+
+  <!-- ── TOAST ─────────────────────────────────────────────── -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ── SCRIPTS ───────────────────────────────────────────── -->
+  <script>
+    /* ── ACTIVITY STORE ────────────────────────────────── */
+    const ACT_KEY = 'ampkart_activity';
+    const MAX_ACT = 5;
+
+    function getActivity() {
+      try { return JSON.parse(localStorage.getItem(ACT_KEY) || '[]'); }
+      catch { return []; }
+    }
+
+    function saveActivity(name, icon) {
+      let acts = getActivity();
+      acts.unshift({ name, icon, time: Date.now() });
+      if (acts.length > MAX_ACT) acts = acts.slice(0, MAX_ACT);
+      localStorage.setItem(ACT_KEY, JSON.stringify(acts));
+      renderActivity();
+    }
+
+    function clearActivity() {
+      localStorage.removeItem(ACT_KEY);
+      renderActivity();
+    }
+
+    function relTime(ts) {
+      const diff = Math.floor((Date.now() - ts) / 1000);
+      if (diff < 60)  return 'Just now';
+      if (diff < 3600) return `${Math.floor(diff/60)}m ago`;
+      if (diff < 86400) return `${Math.floor(diff/3600)}h ago`;
+      return `${Math.floor(diff/86400)}d ago`;
+    }
+
+    function renderActivity() {
+      const list = document.getElementById('activityList');
+      const acts = getActivity();
+      if (!acts.length) {
+        list.innerHTML = '<div class="act-empty"><span>🕒</span>No recent activity</div>';
+        return;
+      }
+      list.innerHTML = acts.map(a => `
+        <div class="act-item">
+          <div class="act-icon">${a.icon}</div>
+          <div class="act-info">
+            <div class="act-name">${a.name} opened</div>
+            <div class="act-time">${relTime(a.time)}</div>
+          </div>
+          <div class="act-dot"></div>
+        </div>
+      `).join('');
+    }
+
+    /* ── TOOL NAVIGATION ───────────────────────────────── */
+    function openTool(name, icon, url) {
+      saveActivity(name, icon);
+      window.location.href = url;
+    }
+
+    /* ── TOAST ─────────────────────────────────────────── */
+    let toastT;
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      clearTimeout(toastT);
+      t.textContent = msg;
+      t.classList.add('show');
+      toastT = setTimeout(() => t.classList.remove('show'), 2600);
+    }
+
+    /* ── METRICS STUB ──────────────────────────────────── */
+    // Replace with Firebase / API fetch when ready
+    function loadMetrics() {
+      // Placeholder — connect to Firestore or REST API
+      // document.getElementById('m-orders').textContent  = data.orders;
+      // document.getElementById('m-revenue').textContent = '₹' + data.revenue;
+      // document.getElementById('m-profit').textContent  = '₹' + data.profit;
+    }
+
+    /* ── MOBILE TAP FEEDBACK ───────────────────────────── */
+    document.querySelectorAll('.tc').forEach(c => {
+      c.addEventListener('pointerdown', function() {
+        this.style.transform = 'scale(.97)';
+        setTimeout(() => this.style.transform = '', 130);
+      });
+    });
+
+    /* ── INIT ──────────────────────────────────────────── */
+    renderActivity();
+    loadMetrics();
+
+    // Refresh timestamps every 30s
+    setInterval(renderActivity, 30000);
+
+    /*
+    ─────────────────────────────────────────────
+    FIREBASE READY STRUCTURE
+    ─────────────────────────────────────────────
+    import { initializeApp } from 'firebase/app';
+    import { getFirestore, collection, getDocs, addDoc } from 'firebase/firestore';
+
+    const db = getFirestore(initializeApp(firebaseConfig));
+
+    async function loadMetrics() {
+      const snap = await getDocs(collection(db, 'metrics'));
+      snap.forEach(doc => {
+        const d = doc.data();
+        document.getElementById('m-orders').textContent  = d.orders;
+        document.getElementById('m-revenue').textContent = '₹' + d.revenue;
+        document.getElementById('m-profit').textContent  = '₹' + d.profit;
+      });
+    }
+
+    async function logToolUsage(name) {
+      await addDoc(collection(db, 'analytics'), {
+        tool: name, timestamp: new Date()
+      });
+    }
+    ─────────────────────────────────────────────
+    */
+  </script>
+
+</body>
+</html>

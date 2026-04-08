@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AMP KART — Pricing Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+<style>
+/* ═══════════════════════════════════════
+   RESET & VARIABLES
+═══════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --yellow:      #FFD600;
+  --yellow-dark: #E6C000;
+  --yellow-glow: rgba(255,214,0,0.22);
+  --yellow-soft: #FFFBE6;
+  --black:       #000000;
+  --white:       #FFFFFF;
+  --blue:        #1E3A8A;
+  --blue-mid:    #2B4EBF;
+  --blue-soft:   #EFF6FF;
+  --bg:          #F2F3F7;
+  --card:        #FFFFFF;
+  --border:      #E4E6EB;
+  --text:        #111111;
+  --muted:       #6B7280;
+  --green:       #16A34A;
+  --green-bg:    #DCFCE7;
+  --red:         #DC2626;
+  --red-bg:      #FEE2E2;
+  --warn:        #D97706;
+  --warn-bg:     #FEF3C7;
+  --shadow:      0 2px 14px rgba(0,0,0,0.07);
+  --shadow-md:   0 4px 20px rgba(0,0,0,0.10);
+  --shadow-lg:   0 10px 36px rgba(0,0,0,0.14);
+  --radius:      16px;
+  --radius-sm:   10px;
+  --radius-xs:   8px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding-bottom: 48px;
+}
+
+/* ═══════════════════════════════════════
+   HEADER
+═══════════════════════════════════════ */
+.header {
+  background: var(--black);
+  padding: 0 20px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.45);
+}
+
+.header-inner {
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 64px;
+}
+
+.logo-wrap {
+  width: 42px;
+  height: 42px;
+  background: var(--yellow);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
+
+.logo-fallback {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  color: var(--black);
+  letter-spacing: 0.5px;
+}
+
+.header-title { display: flex; flex-direction: column; }
+
+.header-title .brand {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  color: var(--yellow);
+  letter-spacing: 2px;
+  line-height: 1;
+}
+
+.header-title .sub {
+  font-size: 10px;
+  color: rgba(255,255,255,0.42);
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.header-badge {
+  margin-left: auto;
+  background: var(--blue);
+  color: var(--white);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════
+   TOAST
+═══════════════════════════════════════ */
+.save-toast {
+  position: fixed;
+  top: 76px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-10px);
+  background: var(--blue);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s, transform 0.25s;
+  z-index: 200;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
+
+.save-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ═══════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════ */
+.main {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ═══════════════════════════════════════
+   BASE CARD
+═══════════════════════════════════════ */
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  animation: slideUp 0.38s ease both;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.card:nth-child(1) { animation-delay: 0.04s; }
+.card:nth-child(2) { animation-delay: 0.08s; }
+.card:nth-child(3) { animation-delay: 0.13s; }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 18px 0;
+}
+
+.card-icon {
+  width: 32px;
+  height: 32px;
+  background: var(--black);
+  border-radius: var(--radius-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.card-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.card-body { padding: 14px 18px 18px; }
+
+/* ═══════════════════════════════════════
+   INPUTS
+═══════════════════════════════════════ */
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field + .field { margin-top: 12px; }
+
+.field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.field label span.req { color: var(--yellow-dark); }
+
+.input-wrap { position: relative; }
+
+.rupee {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--black);
+  pointer-events: none;
+  z-index: 1;
+}
+
+input[type="number"] {
+  width: 100%;
+  padding: 14px 14px 14px 34px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  background: var(--bg);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+input[type="number"]:focus {
+  border-color: var(--yellow);
+  background: var(--white);
+  box-shadow: 0 0 0 4px var(--yellow-glow);
+}
+
+input[type="number"].error {
+  border-color: var(--red);
+  box-shadow: 0 0 0 4px rgba(220,38,38,0.1);
+}
+
+.error-msg {
+  font-size: 11px;
+  color: var(--red);
+  font-weight: 600;
+  display: none;
+  align-items: center;
+  gap: 4px;
+}
+
+.error-msg.show { display: flex; }
+
+/* ── AUTO COSTS GRID ── */
+.costs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.costs-grid .field label { font-size: 11px; }
+
+.costs-grid input[type="number"] {
+  font-size: 17px;
+  padding: 12px 12px 12px 30px;
+}
+
+.costs-grid .rupee { font-size: 15px; }
+
+/* ═══════════════════════════════════════
+   TOOLTIP
+═══════════════════════════════════════ */
+.tooltip-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.tooltip-icon {
+  width: 15px;
+  height: 15px;
+  background: var(--muted);
+  border-radius: 50%;
+  color: white;
+  font-size: 9px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s;
+  flex-shrink: 0;
+  font-style: normal;
+}
+
+.tooltip-icon:hover { background: var(--blue); }
+
+.tooltip-box {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  background: var(--black);
+  color: var(--white);
+  font-size: 11px;
+  font-weight: 400;
+  padding: 8px 11px;
+  border-radius: var(--radius-xs);
+  white-space: nowrap;
+  z-index: 50;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  pointer-events: none;
+  font-style: normal;
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.5;
+}
+
+.tooltip-box::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 12px;
+  border: 5px solid transparent;
+  border-top-color: var(--black);
+}
+
+.tooltip-wrap:hover .tooltip-box,
+.tooltip-wrap:focus-within .tooltip-box { display: block; }
+
+/* ═══════════════════════════════════════
+   RADIO SECTION
+═══════════════════════════════════════ */
+.section-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+  margin-top: 16px;
+}
+
+.section-title:first-child { margin-top: 0; }
+
+.radio-group { display: flex; gap: 10px; }
+
+.radio-group label { flex: 1; cursor: pointer; }
+
+.radio-group input[type="radio"] { display: none; }
+
+.radio-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 12px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--bg);
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.radio-btn .dot {
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  flex-shrink: 0;
+  position: relative;
+  transition: border-color 0.2s;
+}
+
+.radio-btn .dot::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%) scale(0);
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--blue);
+  transition: transform 0.2s;
+}
+
+.radio-group input[type="radio"]:checked + .radio-btn {
+  border-color: var(--blue);
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+.radio-group input[type="radio"]:checked + .radio-btn .dot { border-color: var(--blue); }
+.radio-group input[type="radio"]:checked + .radio-btn .dot::after { transform: translate(-50%,-50%) scale(1); }
+
+/* ═══════════════════════════════════════
+   DIVIDER + BUTTONS
+═══════════════════════════════════════ */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 18px 0;
+}
+
+.btn-row { display: flex; gap: 10px; }
+
+.btn {
+  flex: 1;
+  padding: 15px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  transition: all 0.18s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.btn-save {
+  background: var(--bg);
+  color: var(--blue);
+  border: 2px solid var(--blue);
+}
+
+.btn-save:hover {
+  background: var(--blue);
+  color: var(--white);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(30,58,138,0.22);
+}
+
+.btn-calc {
+  background: var(--yellow);
+  color: var(--black);
+  flex: 2;
+  border: 2px solid var(--yellow);
+  font-size: 15px;
+}
+
+.btn-calc:hover {
+  background: var(--yellow-dark);
+  border-color: var(--yellow-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255,214,0,0.38);
+}
+
+.btn-calc:active { transform: translateY(0); box-shadow: none; }
+
+.btn-calc.pulse { animation: btnpulse 0.28s ease; }
+
+@keyframes btnpulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(0.96); }
+  100% { transform: scale(1); }
+}
+
+/* ═══════════════════════════════════════
+   EMPTY STATE
+═══════════════════════════════════════ */
+.empty-state {
+  text-align: center;
+  padding: 36px 20px;
+  color: var(--muted);
+  animation: slideUp 0.4s ease both;
+}
+
+.empty-state .empty-icon { font-size: 42px; margin-bottom: 12px; }
+.empty-state p { font-size: 14px; font-weight: 500; }
+.empty-state small { font-size: 12px; opacity: 0.55; }
+
+/* ═══════════════════════════════════════
+   RESULT SECTION WRAPPER
+═══════════════════════════════════════ */
+.result-section { display: none; flex-direction: column; gap: 14px; }
+.result-section.show { display: flex; }
+
+/* ═══════════════════════════════════════
+   RESULT BLOCK A — RECOMMENDED (HERO)
+═══════════════════════════════════════ */
+.rec-hero {
+  background: var(--black);
+  border-radius: var(--radius);
+  padding: 22px 20px 20px;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+  animation: slideUp 0.32s ease both;
+}
+
+/* yellow glow blob */
+.rec-hero::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 160px; height: 160px;
+  background: radial-gradient(circle, rgba(255,214,0,0.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.rec-hero-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.38);
+  margin-bottom: 6px;
+}
+
+.rec-hero-price {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 72px;
+  color: var(--yellow);
+  line-height: 1;
+  letter-spacing: 1px;
+}
+
+.rec-hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.meta-chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.75);
+}
+
+.meta-chip.profit { color: #4ADE80; border-color: rgba(74,222,128,0.25); background: rgba(74,222,128,0.08); }
+.meta-chip.margin { color: #FACC15; border-color: rgba(250,204,21,0.25); background: rgba(250,204,21,0.08); }
+
+.rec-hero-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.08);
+  margin: 16px 0;
+}
+
+.rec-hero-totalrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rec-hero-totalrow .tl { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.35); letter-spacing: 0.5px; }
+.rec-hero-totalrow .tv { font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.6); }
+
+/* risk pill inside rec-hero */
+.rec-risk-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.rec-risk-pill.safe { background: rgba(22,163,74,0.18); color: #4ADE80; }
+.rec-risk-pill.warn { background: rgba(217,119,6,0.18); color: #FCD34D; }
+.rec-risk-pill.risk { background: rgba(220,38,38,0.18); color: #F87171; }
+
+/* ═══════════════════════════════════════
+   RESULT BLOCKS B+C — COD & HIGH
+═══════════════════════════════════════ */
+.secondary-prices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.sec-card {
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+  transition: transform 0.18s, box-shadow 0.18s;
+  animation: slideUp 0.36s ease both;
+}
+
+.sec-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.sec-card.cod-card {
+  background: var(--blue);
+}
+
+.sec-card.high-card {
+  background: #1C1C1E;
+}
+
+.sec-tag {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.cod-card .sec-tag { color: rgba(255,255,255,0.45); }
+.high-card .sec-tag { color: rgba(255,255,255,0.38); }
+
+.sec-price {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 38px;
+  line-height: 1;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+
+.cod-card .sec-price { color: var(--yellow); }
+.high-card .sec-price { color: #FFFFFF; }
+
+.sec-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sec-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.cod-card .sec-meta-row .sl { color: rgba(255,255,255,0.40); }
+.cod-card .sec-meta-row .sv { color: rgba(255,255,255,0.85); }
+.high-card .sec-meta-row .sl { color: rgba(255,255,255,0.35); }
+.high-card .sec-meta-row .sv { color: rgba(255,255,255,0.80); }
+
+.sec-meta-row .sv.green { color: #4ADE80; }
+.sec-meta-row .sv.yellow { color: var(--yellow); }
+
+/* ═══════════════════════════════════════
+   BREAKDOWN CARD — COLLAPSIBLE
+═══════════════════════════════════════ */
+.breakdown-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  animation: slideUp 0.40s ease both;
+  animation-delay: 0.06s;
+}
+
+.bk-toggle-header {
+  background: var(--blue);
+  padding: 13px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s;
+}
+
+.bk-toggle-header:hover { background: var(--blue-mid); }
+
+.bk-toggle-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.75);
+}
+
+.bk-arrow {
+  font-size: 12px;
+  color: rgba(255,255,255,0.55);
+  transition: transform 0.28s cubic-bezier(.4,0,.2,1);
+  flex-shrink: 0;
+}
+
+.bk-arrow.open { transform: rotate(0deg); }
+.bk-arrow.closed { transform: rotate(-90deg); }
+
+/* collapsible body */
+.bk-body-wrap {
+  overflow: hidden;
+  max-height: 600px;
+  transition: max-height 0.38s cubic-bezier(.4,0,.2,1), opacity 0.3s ease;
+  opacity: 1;
+}
+
+.bk-body-wrap.collapsed {
+  max-height: 0;
+  opacity: 0;
+}
+
+.bk-body { padding: 4px 0 2px; }
+
+.bk-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s;
+}
+
+.bk-row:last-child { border-bottom: none; }
+.bk-row:hover { background: var(--bg); }
+
+.bk-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.bk-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.bk-val { font-size: 15px; font-weight: 700; color: var(--text); }
+
+.bk-row.bk-total {
+  background: var(--bg);
+  border-top: 2px solid var(--border);
+}
+
+.bk-row.bk-total .bk-left { font-weight: 700; }
+.bk-row.bk-total .bk-val { font-size: 16px; color: var(--blue); }
+
+/* ═══════════════════════════════════════
+   RISK / ANALYSIS CARD
+═══════════════════════════════════════ */
+.analysis-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  animation: slideUp 0.44s ease both;
+  animation-delay: 0.10s;
+}
+
+.analysis-header {
+  padding: 14px 18px 0;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.analysis-icon {
+  width: 30px;
+  height: 30px;
+  background: var(--yellow);
+  border-radius: var(--radius-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.analysis-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.analysis-body {
+  padding: 14px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* margin bar */
+.mbar-wrap { display: flex; flex-direction: column; gap: 6px; }
+
+.mbar-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.mbar-top .cur { font-size: 13px; font-weight: 700; color: var(--text); }
+
+.mbar {
+  height: 9px;
+  background: var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.mbar-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.75s cubic-bezier(.22,.68,0,1.15), background 0.3s;
+  background: var(--yellow);
+}
+
+/* risk badge */
+.risk-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  transition: all 0.3s;
+}
+
+.risk-badge.safe { background: var(--green-bg);  border-color: var(--green); }
+.risk-badge.warn { background: var(--warn-bg);   border-color: var(--warn); }
+.risk-badge.risk { background: var(--red-bg);    border-color: var(--red); }
+
+.risk-badge .r-emoji { font-size: 26px; }
+
+.risk-badge .r-text .r-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.risk-badge.safe .r-label { color: var(--green); }
+.risk-badge.warn .r-label { color: var(--warn); }
+.risk-badge.risk .r-label { color: var(--red); }
+
+.risk-badge .r-text .r-desc {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+  font-weight: 400;
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media (max-width: 380px) {
+  .rec-hero-price { font-size: 58px; }
+  .secondary-prices { grid-template-columns: 1fr; }
+  .sec-price { font-size: 34px; }
+  .costs-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo-wrap" id="logoWrap">
+      <img src="photo/logo.png" alt="AMP KART" id="logoImg" onerror="handleLogoError()" />
+    </div>
+    <div class="header-title">
+      <span class="brand">AMP KART</span>
+      <span class="sub">Pricing Calculator</span>
+    </div>
+    <div class="header-badge">Internal</div>
+  </div>
+</header>
+
+<div class="save-toast" id="saveToast">✓ Settings Saved!</div>
+
+<!-- ── MAIN ── -->
+<main class="main">
+
+  <!-- CARD 1: PRODUCT COST -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">📦</div>
+      <div class="card-label">Product Details</div>
+    </div>
+    <div class="card-body">
+      <div class="field">
+        <label>Product Cost <span class="req">*</span></label>
+        <div class="input-wrap">
+          <span class="rupee">₹</span>
+          <input type="number" id="productCost" placeholder="0" min="0" inputmode="numeric" />
+        </div>
+        <div class="error-msg" id="errorMsg">⚠ Product cost is required</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 2: AUTO COSTS -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">⚙️</div>
+      <div class="card-label">Auto Costs (Editable)</div>
+    </div>
+    <div class="card-body">
+      <div class="costs-grid">
+
+        <div class="field">
+          <label>Packaging</label>
+          <div class="input-wrap">
+            <span class="rupee">₹</span>
+            <input type="number" id="packaging" value="10" min="0" inputmode="numeric" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Ads Cost</label>
+          <div class="input-wrap">
+            <span class="rupee">₹</span>
+            <input type="number" id="ads" value="30" min="0" inputmode="numeric" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>
+            Payment Charges
+            <span class="tooltip-wrap">
+              <i class="tooltip-icon">i</i>
+              <span class="tooltip-box">Covers gateway fees (2–3%)<br>added to every order.</span>
+            </span>
+          </label>
+          <div class="input-wrap">
+            <span class="rupee">₹</span>
+            <input type="number" id="payment" value="10" min="0" inputmode="numeric" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>RTO Buffer</label>
+          <div class="input-wrap">
+            <span class="rupee">₹</span>
+            <input type="number" id="rto" value="20" min="0" inputmode="numeric" />
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 3: DELIVERY OPTIONS -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🚚</div>
+      <div class="card-label">Delivery Options</div>
+    </div>
+    <div class="card-body">
+
+      <div class="section-title">Delivery Mode</div>
+      <div class="radio-group">
+        <label>
+          <input type="radio" name="mode" value="state" id="modeState" checked />
+          <div class="radio-btn"><span class="dot"></span>State</div>
+        </label>
+        <label>
+          <input type="radio" name="mode" value="allindia" id="modeAllIndia" />
+          <div class="radio-btn"><span class="dot"></span>All India</div>
+        </label>
+      </div>
+
+      <div class="section-title">Weight Category</div>
+      <div class="radio-group">
+        <label>
+          <input type="radio" name="weight" value="under500" id="wt500" checked />
+          <div class="radio-btn"><span class="dot"></span>Under 500g</div>
+        </label>
+        <label>
+          <input type="radio" name="weight" value="1kg" id="wt1kg" />
+          <div class="radio-btn"><span class="dot"></span>500g–1kg</div>
+        </label>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="btn-row">
+        <button class="btn btn-save" onclick="saveSettings()">💾 Save</button>
+        <button class="btn btn-calc" id="calcBtn" onclick="calculate()">⚡ Calculate</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- EMPTY STATE -->
+  <div id="emptyState" class="empty-state card" style="padding:36px 20px;">
+    <div class="empty-icon">🧮</div>
+    <p>Enter product cost and calculate</p>
+    <small>Results will appear here</small>
+  </div>
+
+  <!-- ══════════════════ RESULTS ══════════════════ -->
+  <div class="result-section" id="resultSection">
+
+    <!-- A. RECOMMENDED PRICE (HERO) -->
+    <div class="rec-hero">
+      <div class="rec-hero-tag">⭐ Recommended Price</div>
+      <div class="rec-hero-price" id="rRecPrice">₹0</div>
+
+      <div class="rec-hero-meta">
+        <div class="meta-chip profit">
+          Profit: <span id="rRecProfit">₹0</span>
+        </div>
+        <div class="meta-chip margin">
+          Margin: <span id="rRecMargin">0%</span>
+        </div>
+        <div class="rec-risk-pill" id="riskPill">—</div>
+      </div>
+
+      <div class="rec-hero-divider"></div>
+
+      <div class="rec-hero-totalrow">
+        <span class="tl">Total Cost</span>
+        <span class="tv" id="rTotalCost">₹0</span>
+      </div>
+    </div>
+
+    <!-- B + C: COD & HIGH PRICE -->
+    <div class="secondary-prices">
+
+      <!-- B. COD PRICE -->
+      <div class="sec-card cod-card">
+        <div class="sec-tag">📲 COD Price</div>
+        <div class="sec-price" id="rCodPrice">₹0</div>
+        <div class="sec-meta">
+          <div class="sec-meta-row">
+            <span class="sl">Profit</span>
+            <span class="sv green" id="rCodProfit">₹0</span>
+          </div>
+          <div class="sec-meta-row">
+            <span class="sl">Margin</span>
+            <span class="sv yellow" id="rCodMargin">0%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- C. HIGH PRICE -->
+      <div class="sec-card high-card">
+        <div class="sec-tag">🔝 High Price</div>
+        <div class="sec-price" id="rHighPrice">₹0</div>
+        <div class="sec-meta">
+          <div class="sec-meta-row">
+            <span class="sl">Profit</span>
+            <span class="sv green" id="rHighProfit">₹0</span>
+          </div>
+          <div class="sec-meta-row">
+            <span class="sl">Margin</span>
+            <span class="sv yellow" id="rHighMargin">0%</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- COST BREAKDOWN (COLLAPSIBLE) -->
+    <div class="breakdown-card">
+      <div class="bk-toggle-header" id="bkToggle" onclick="toggleBreakdown()">
+        <div class="bk-toggle-left">
+          <span>💰</span>
+          <span>Cost Breakdown</span>
+        </div>
+        <span class="bk-arrow open" id="bkArrow">▼</span>
+      </div>
+
+      <div class="bk-body-wrap" id="bkBodyWrap">
+        <div class="bk-body">
+          <div class="bk-row">
+            <div class="bk-left"><div class="bk-dot" style="background:#6366F1;"></div>Product Cost</div>
+            <div class="bk-val" id="bProductCost">₹0</div>
+          </div>
+          <div class="bk-row">
+            <div class="bk-left"><div class="bk-dot" style="background:#F59E0B;"></div>Delivery</div>
+            <div class="bk-val" id="bDelivery">₹0</div>
+          </div>
+          <div class="bk-row">
+            <div class="bk-left"><div class="bk-dot" style="background:#10B981;"></div>Packaging</div>
+            <div class="bk-val" id="bPackaging">₹0</div>
+          </div>
+          <div class="bk-row">
+            <div class="bk-left"><div class="bk-dot" style="background:#3B82F6;"></div>Ads</div>
+            <div class="bk-val" id="bAds">₹0</div>
+          </div>
+          <div class="bk-row">
+            <div class="bk-left"><div class="bk-dot" style="background:#EC4899;"></div>Payment</div>
+            <div class="bk-val" id="bPayment">₹0</div>
+          </div>
+          <div class="bk-row">
+            <div class="bk-left"><div class="bk-dot" style="background:#EF4444;"></div>RTO Buffer</div>
+            <div class="bk-val" id="bRTO">₹0</div>
+          </div>
+          <div class="bk-row bk-total">
+            <div class="bk-left">Total Cost</div>
+            <div class="bk-val" id="bTotal">₹0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANALYSIS CARD -->
+    <div class="analysis-card">
+      <div class="analysis-header">
+        <div class="analysis-icon">📊</div>
+        <div class="analysis-title">Profit Analysis</div>
+      </div>
+      <div class="analysis-body">
+
+        <div class="mbar-wrap">
+          <div class="mbar-top">
+            <span>0%</span>
+            <span class="cur" id="mbarLabel">0%</span>
+            <span>50%+</span>
+          </div>
+          <div class="mbar">
+            <div class="mbar-fill" id="mbarFill" style="width:0%;"></div>
+          </div>
+        </div>
+
+        <div class="risk-badge" id="riskBadge">
+          <div class="r-emoji" id="riskEmoji">🟡</div>
+          <div class="r-text">
+            <div class="r-label" id="riskLabel">—</div>
+            <div class="r-desc" id="riskDesc">Calculate to see risk level</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /result-section -->
+
+</main>
+
+<script>
+/* ═══════════════════════════════════════
+   LOGO FALLBACK
+═══════════════════════════════════════ */
+function handleLogoError() {
+  const wrap = document.getElementById('logoWrap');
+  wrap.innerHTML = '<span class="logo-fallback">AK</span>';
+}
+
+/* ═══════════════════════════════════════
+   HELPERS
+═══════════════════════════════════════ */
+const rnd  = (n) => Math.round(n);
+const fmt  = (n) => '₹' + rnd(n).toLocaleString('en-IN');
+const pct  = (n) => rnd(n) + '%';
+
+function profitAndMargin(price, totalCost) {
+  const profit = price - totalCost;
+  const margin = (profit / totalCost) * 100;
+  return { profit, margin };
+}
+
+function getDeliveryCost() {
+  const mode   = document.querySelector('input[name="mode"]:checked').value;
+  const weight = document.querySelector('input[name="weight"]:checked').value;
+
+  if (mode === 'state') {
+    return weight === 'under500' ? 80 : 100;
+  }
+  if (mode === 'allindia') {
+    return weight === 'under500' ? 110 : 140;
+  }
+  return 80;
+}
+
+/* ═══════════════════════════════════════
+   BREAKDOWN TOGGLE
+═══════════════════════════════════════ */
+function toggleBreakdown() {
+  const wrap  = document.getElementById('bkBodyWrap');
+  const arrow = document.getElementById('bkArrow');
+  const isOpen = !wrap.classList.contains('collapsed');
+
+  if (isOpen) {
+    wrap.classList.add('collapsed');
+    arrow.classList.replace('open', 'closed');
+    localStorage.setItem('ampkart_breakdown', 'closed');
+  } else {
+    wrap.classList.remove('collapsed');
+    arrow.classList.replace('closed', 'open');
+    localStorage.setItem('ampkart_breakdown', 'open');
+  }
+}
+
+/* ═══════════════════════════════════════
+   ON LOAD — RESTORE SETTINGS
+═══════════════════════════════════════ */
+window.addEventListener('DOMContentLoaded', () => {
+
+  // mode & weight
+  const savedMode   = localStorage.getItem('ampkart_mode');
+  const savedWeight = localStorage.getItem('ampkart_weight');
+
+  if (savedMode) {
+    const el = document.querySelector(`input[name="mode"][value="${savedMode}"]`);
+    if (el) el.checked = true;
+  }
+  if (savedWeight) {
+    const el = document.querySelector(`input[name="weight"][value="${savedWeight}"]`);
+    if (el) el.checked = true;
+  }
+
+  // breakdown collapse state (default: open)
+  const bdState = localStorage.getItem('ampkart_breakdown');
+  if (bdState === 'closed') {
+    const wrap  = document.getElementById('bkBodyWrap');
+    const arrow = document.getElementById('bkArrow');
+    wrap.classList.add('collapsed');
+    arrow.classList.replace('open', 'closed');
+  }
+});
+
+/* ═══════════════════════════════════════
+   SAVE SETTINGS
+═══════════════════════════════════════ */
+function saveSettings() {
+  const mode   = document.querySelector('input[name="mode"]:checked').value;
+  const weight = document.querySelector('input[name="weight"]:checked').value;
+  localStorage.setItem('ampkart_mode',   mode);
+  localStorage.setItem('ampkart_weight', weight);
+
+  const toast = document.getElementById('saveToast');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2200);
+}
+
+/* ═══════════════════════════════════════
+   CALCULATE
+═══════════════════════════════════════ */
+function calculate() {
+  const pcEl  = document.getElementById('productCost');
+  const errEl = document.getElementById('errorMsg');
+  const btn   = document.getElementById('calcBtn');
+  const empty = document.getElementById('emptyState');
+  const res   = document.getElementById('resultSection');
+
+  // ── VALIDATE ──
+  const pc = parseFloat(pcEl.value);
+  if (!pcEl.value || isNaN(pc) || pc <= 0) {
+    pcEl.classList.add('error');
+    errEl.classList.add('show');
+    pcEl.focus();
+    setTimeout(() => {
+      pcEl.classList.remove('error');
+      errEl.classList.remove('show');
+    }, 3000);
+    return;
+  }
+
+  pcEl.classList.remove('error');
+  errEl.classList.remove('show');
+
+  // button bounce
+  btn.classList.add('btnpulse');
+  setTimeout(() => btn.classList.remove('btnpulse'), 300);
+
+  // ── GATHER VALUES ──
+  const packaging = parseFloat(document.getElementById('packaging').value) || 0;
+  const ads       = parseFloat(document.getElementById('ads').value)       || 0;
+  const payment   = parseFloat(document.getElementById('payment').value)   || 0;
+  const rto       = parseFloat(document.getElementById('rto').value)       || 0;
+  const delivery  = getDeliveryCost();
+
+  const totalCost = pc + packaging + ads + payment + rto + delivery;
+
+  // ── PRICES ──
+  const recPrice  = rnd(totalCost * 1.3);
+  const highPrice = rnd(totalCost * 1.5);
+  const codPrice  = recPrice + 30;
+
+  // ── PER-PRICE PROFIT + MARGIN ──
+  const rec  = profitAndMargin(recPrice,  totalCost);
+  const high = profitAndMargin(highPrice, totalCost);
+  const cod  = profitAndMargin(codPrice,  totalCost);
+
+  // ── BLOCK A — RECOMMENDED ──
+  document.getElementById('rRecPrice').textContent  = fmt(recPrice);
+  document.getElementById('rRecProfit').textContent = fmt(rec.profit);
+  document.getElementById('rRecMargin').textContent = pct(rec.margin);
+  document.getElementById('rTotalCost').textContent = fmt(totalCost);
+
+  // ── BLOCK B — COD ──
+  document.getElementById('rCodPrice').textContent  = fmt(codPrice);
+  document.getElementById('rCodProfit').textContent = fmt(cod.profit);
+  document.getElementById('rCodMargin').textContent = pct(cod.margin);
+
+  // ── BLOCK C — HIGH ──
+  document.getElementById('rHighPrice').textContent  = fmt(highPrice);
+  document.getElementById('rHighProfit').textContent = fmt(high.profit);
+  document.getElementById('rHighMargin').textContent = pct(high.margin);
+
+  // ── BREAKDOWN ──
+  document.getElementById('bProductCost').textContent = fmt(pc);
+  document.getElementById('bDelivery').textContent    = fmt(delivery);
+  document.getElementById('bPackaging').textContent   = fmt(packaging);
+  document.getElementById('bAds').textContent         = fmt(ads);
+  document.getElementById('bPayment').textContent     = fmt(payment);
+  document.getElementById('bRTO').textContent         = fmt(rto);
+  document.getElementById('bTotal').textContent       = fmt(totalCost);
+
+  // ── MARGIN BAR (based on rec) ──
+  const barW = Math.min(Math.max(0, rec.margin), 50) * 2; // 0–100% fill
+  const fill = document.getElementById('mbarFill');
+  fill.style.width = barW + '%';
+  document.getElementById('mbarLabel').textContent = pct(rec.margin);
+
+  // ── RISK SYSTEM (based on rec margin) ──
+  const badge = document.getElementById('riskBadge');
+  const pill  = document.getElementById('riskPill');
+  const rlabel = document.getElementById('riskLabel');
+  const rdesc  = document.getElementById('riskDesc');
+  const remoji = document.getElementById('riskEmoji');
+
+  badge.className = 'risk-badge';
+  pill.className  = 'rec-risk-pill';
+
+  if (rec.margin > 25) {
+    badge.classList.add('safe');
+    pill.classList.add('safe');
+    pill.textContent  = '✅ SAFE';
+    rlabel.textContent = '✅ SAFE';
+    remoji.textContent = '🟢';
+    rdesc.textContent  = `Margin ${pct(rec.margin)} — Great profit margin!`;
+    fill.style.background = 'var(--green)';
+  } else if (rec.margin >= 10) {
+    badge.classList.add('warn');
+    pill.classList.add('warn');
+    pill.textContent  = '⚠️ WARNING';
+    rlabel.textContent = '⚠️ WARNING';
+    remoji.textContent = '🟡';
+    rdesc.textContent  = `Margin ${pct(rec.margin)} — Consider reducing costs.`;
+    fill.style.background = 'var(--warn)';
+  } else {
+    badge.classList.add('risk');
+    pill.classList.add('risk');
+    pill.textContent  = '🔴 RISK';
+    rlabel.textContent = '🔴 RISK';
+    remoji.textContent = '🔴';
+    rdesc.textContent  = `Margin ${pct(rec.margin)} — Very low margin! Review pricing.`;
+    fill.style.background = 'var(--red)';
+  }
+
+  // ── SHOW RESULTS ──
+  empty.style.display = 'none';
+  res.classList.add('show');
+
+  setTimeout(() => {
+    res.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 80);
+}
+
+/* ── ENTER KEY ── */
+document.getElementById('productCost').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') calculate();
+});
+</script>
+</body>
+</html>
