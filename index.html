@@ -3,676 +3,648 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AMP KART — Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <title>AMP KART — Tool OS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
-    /* ─── TOKENS ───────────────────────────────────────────── */
     :root {
-      --y:       #FFD600;
-      --yd:      #E6C000;
-      --yg:      rgba(255,214,0,.13);
-      --blk:     #000000;
-      --wht:     #FFFFFF;
-      --blu:     #1E3A8A;
-      --blu2:    #2D52C4;
-      --bg:      #F0F1F5;
-      --card:    #FFFFFF;
-      --bdr:     #E2E4EC;
-      --txt:     #0F1117;
-      --muted:   #6B7280;
-      --r:       12px;
-      --rsm:     8px;
-      --sh:      0 1px 6px rgba(0,0,0,.07);
-      --shh:     0 6px 24px rgba(0,0,0,.12);
-      --hdr:     56px;
-      --f:       'Poppins', sans-serif;
-      --ease:    .2s cubic-bezier(.4,0,.2,1);
+      --y:    #FFD600;
+      --yd:   #C9AC00;
+      --yg:   rgba(255,214,0,.10);
+      --blk:  #000000;
+      --wht:  #FFFFFF;
+      --blu:  #1E3A8A;
+      --bg:   #EBEBEE;
+      --card: #FFFFFF;
+      --bdr:  #DDDFE8;
+      --txt:  #0D0F14;
+      --sub:  #6B7280;
+      --r:    14px;
+      --rsm:  8px;
+      --f:    'Poppins', sans-serif;
+      --ease: .18s cubic-bezier(.4,0,.2,1);
+      --hh:   54px;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
     body {
       font-family: var(--f);
       background: var(--bg);
       color: var(--txt);
       min-height: 100vh;
       overflow-x: hidden;
-      font-size: 13px;
     }
     a { text-decoration: none; color: inherit; }
-    button { font-family: var(--f); cursor: pointer; border: none; outline: none; }
+    button { font-family: var(--f); cursor: pointer; border: none; background: none; outline: none; }
 
-    /* ─── HEADER ───────────────────────────────────────────── */
+    /* ── HEADER ─────────────────────────────────────── */
     .hdr {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-      height: var(--hdr);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+      height: var(--hh);
       background: var(--blk);
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 16px;
+      padding: 0 18px;
       border-bottom: 2px solid var(--y);
     }
     .hdr-left { display: flex; align-items: center; gap: 10px; }
-    .logo-img {
-      height: 34px; width: 34px;
-      border-radius: var(--rsm);
-      object-fit: cover;
+    .logo {
+      width: 32px; height: 32px; border-radius: var(--rsm);
       background: var(--y);
       display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 800; color: var(--blk);
-      flex-shrink: 0;
-      overflow: hidden;
+      font-size: 12px; font-weight: 800; color: var(--blk);
+      overflow: hidden; flex-shrink: 0;
     }
-    .logo-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .logo-img .fallback { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
-    .brand-name {
-      font-size: 17px; font-weight: 800;
-      color: var(--y); letter-spacing: 1.5px;
-    }
-    .brand-sub {
-      font-size: 8.5px; color: rgba(255,255,255,.38);
-      letter-spacing: .4px; text-transform: uppercase;
-    }
+    .logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .brand { font-size: 16px; font-weight: 800; color: var(--y); letter-spacing: 1.5px; }
+    .brand-sub { font-size: 8px; color: rgba(255,255,255,.32); letter-spacing: .4px; text-transform: uppercase; }
+    .hdr-right { display: flex; align-items: center; gap: 10px; }
     .badge-int {
       font-size: 9px; font-weight: 600;
       background: rgba(255,214,0,.1);
-      border: 1px solid rgba(255,214,0,.3);
+      border: 1px solid rgba(255,214,0,.28);
       color: var(--y); padding: 3px 9px;
       border-radius: 20px; letter-spacing: .3px;
     }
-
-    /* ─── LAYOUT ───────────────────────────────────────────── */
-    .page { padding-top: calc(var(--hdr) + 14px); padding-bottom: 48px; }
-    .wrap { max-width: 1060px; margin: 0 auto; padding: 0 14px; }
-
-    /* ─── HERO / CONTROL PANEL ─────────────────────────────── */
-    .hero {
-      background: var(--blk);
-      border-radius: var(--r);
-      padding: 18px 18px;
-      margin-bottom: 14px;
-      display: flex; flex-direction: column; gap: 14px;
-      position: relative; overflow: hidden;
-      animation: fadeUp .4s ease both;
-    }
-    .hero::before {
-      content: '';
-      position: absolute; top: -50px; right: -50px;
-      width: 180px; height: 180px;
-      background: radial-gradient(circle, rgba(255,214,0,.14) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .hero-top {
-      display: flex; align-items: flex-start; justify-content: space-between;
-      gap: 12px;
-    }
-    .hero-info { flex: 1; }
-    .hero-tag {
-      display: inline-flex; align-items: center; gap: 5px;
-      background: var(--yg);
-      border: 1px solid rgba(255,214,0,.25);
-      color: var(--y); font-size: 9px; font-weight: 600;
-      padding: 3px 9px; border-radius: 20px;
-      letter-spacing: .5px; text-transform: uppercase;
-      margin-bottom: 7px;
-    }
-    .hero-tag-dot { width: 5px; height: 5px; background: var(--y); border-radius: 50%; animation: pulse 2s infinite; }
-    .hero-title {
-      font-size: clamp(26px,6vw,38px);
-      font-weight: 800; color: var(--wht);
-      letter-spacing: -.3px; line-height: 1;
-      margin-bottom: 4px;
-    }
-    .hero-title span { color: var(--y); }
-    .hero-sub {
-      font-size: 11px; color: rgba(255,255,255,.42);
-      font-weight: 400; line-height: 1.5;
-    }
-
-    /* METRICS GRID */
-    .metrics {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-    }
-    @media(min-width:560px) { .metrics { grid-template-columns: repeat(4,1fr); } }
-    .metric {
-      background: rgba(255,255,255,.05);
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: var(--rsm);
-      padding: 10px 12px;
-      display: flex; flex-direction: column; gap: 3px;
-    }
-    .metric-lbl {
-      font-size: 9px; font-weight: 500;
-      color: rgba(255,255,255,.4); letter-spacing: .3px;
-      text-transform: uppercase;
-    }
-    .metric-val {
-      font-size: 20px; font-weight: 700;
-      color: var(--y); line-height: 1;
-    }
-    .metric-val.white { color: var(--wht); }
-    .metric-delta {
-      font-size: 9px; font-weight: 500; color: #10b981;
-    }
-
-    /* ─── SECTION LABEL ────────────────────────────────────── */
-    .sec-head {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 10px;
-    }
-    .sec-title {
-      font-size: 12px; font-weight: 700;
-      color: var(--txt); letter-spacing: .3px;
-      text-transform: uppercase;
-    }
-    .sec-count {
-      font-size: 10px; font-weight: 600; color: var(--muted);
-      background: var(--bdr); padding: 2px 9px; border-radius: 20px;
-    }
-
-    /* ─── RECENT ACTIVITY ──────────────────────────────────── */
-    .activity-box {
-      background: var(--card);
-      border: 1.5px solid var(--bdr);
-      border-radius: var(--r);
-      padding: 14px 16px;
-      margin-bottom: 14px;
-      animation: fadeUp .4s .08s ease both;
-    }
-    .activity-list { display: flex; flex-direction: column; gap: 0; }
-    .act-item {
-      display: flex; align-items: center; gap: 10px;
-      padding: 8px 0;
-      border-bottom: 1px solid var(--bdr);
-      transition: var(--ease);
-    }
-    .act-item:last-child { border-bottom: none; padding-bottom: 0; }
-    .act-item:first-child { padding-top: 0; }
-    .act-icon {
-      width: 30px; height: 30px; flex-shrink: 0;
-      background: var(--bg);
+    .settings-btn {
+      width: 32px; height: 32px;
+      background: rgba(255,255,255,.07);
       border-radius: var(--rsm);
       display: flex; align-items: center; justify-content: center;
-      font-size: 14px;
-    }
-    .act-info { flex: 1; min-width: 0; }
-    .act-name {
-      font-size: 12px; font-weight: 600; color: var(--txt);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-    .act-time { font-size: 10px; color: var(--muted); }
-    .act-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--y); flex-shrink: 0;
-    }
-    .act-empty {
-      text-align: center; padding: 18px 0;
-      font-size: 12px; color: var(--muted);
-    }
-    .act-empty span { display: block; font-size: 24px; margin-bottom: 6px; }
-
-    /* ─── QUICK ACCESS GRID ────────────────────────────────── */
-    .quick-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-      margin-bottom: 14px;
-      animation: fadeUp .4s .12s ease both;
-    }
-    @media(min-width:680px) { .quick-grid { grid-template-columns: repeat(4,1fr); } }
-    .q-btn {
-      background: var(--card);
-      border: 1.5px solid var(--bdr);
-      border-radius: var(--r);
-      padding: 11px 12px;
-      display: flex; align-items: center; gap: 8px;
-      font-size: 12px; font-weight: 600; color: var(--txt);
+      font-size: 15px;
       transition: var(--ease);
-      cursor: pointer;
+      border: 1px solid rgba(255,255,255,.1);
     }
-    .q-btn .qi { font-size: 16px; }
-    .q-btn:hover {
-      border-color: var(--y);
-      background: var(--yg);
-      transform: translateY(-1px);
-      box-shadow: var(--shh);
-    }
-    .q-btn.ql { background: var(--blk); color: var(--y); border-color: var(--blk); }
-    .q-btn.ql:hover { border-color: var(--y); }
+    .settings-btn:hover { background: rgba(255,214,0,.15); border-color: rgba(255,214,0,.35); }
 
-    /* ─── TOOL GRID ────────────────────────────────────────── */
+    /* ── PAGE ───────────────────────────────────────── */
+    .page {
+      padding-top: calc(var(--hh) + 20px);
+      padding-bottom: 50px;
+    }
+    .wrap { max-width: 900px; margin: 0 auto; padding: 0 16px; }
+
+    /* ── HERO STRIP ─────────────────────────────────── */
+    .hero-strip {
+      background: var(--blk);
+      border-radius: var(--r);
+      padding: 16px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 18px;
+      border: 1.5px solid rgba(255,214,0,.15);
+      animation: fu .4s ease both;
+    }
+    .hero-left {}
+    .hero-title {
+      font-size: clamp(22px,4vw,30px);
+      font-weight: 800; color: var(--wht);
+      letter-spacing: -.2px; line-height: 1;
+    }
+    .hero-title em { color: var(--y); font-style: normal; }
+    .hero-sub { font-size: 11px; color: rgba(255,255,255,.38); margin-top: 3px; font-weight: 400; }
+    .hero-right { display: flex; gap: 10px; flex-shrink: 0; }
+    .metric {
+      text-align: right;
+    }
+    .metric-val { font-size: 20px; font-weight: 700; color: var(--y); line-height: 1; }
+    .metric-val.w { color: var(--wht); }
+    .metric-lbl { font-size: 9px; color: rgba(255,255,255,.3); text-transform: uppercase; letter-spacing: .3px; }
+
+    /* ── TOOL GRID ──────────────────────────────────── */
+    .grid-wrap { animation: fu .4s .08s ease both; }
     .tool-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
     }
-    @media(min-width:560px) { .tool-grid { grid-template-columns: repeat(3, 1fr); } }
-    @media(min-width:860px) { .tool-grid { grid-template-columns: repeat(4, 1fr); } }
+    @media(max-width: 580px) { .tool-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
+    @media(max-width: 340px) { .tool-grid { grid-template-columns: 1fr; } }
 
-    /* ─── TOOL CARD (COMPACT) ──────────────────────────────── */
+    /* ── TOOL CARD ──────────────────────────────────── */
     .tc {
       background: var(--card);
       border: 1.5px solid var(--bdr);
       border-radius: var(--r);
-      padding: 14px 13px;
-      display: flex; flex-direction: column; gap: 10px;
+      padding: 16px 14px 14px;
+      display: flex; flex-direction: column; gap: 11px;
       position: relative; overflow: hidden;
-      transition: var(--ease);
+      transition: transform var(--ease), box-shadow var(--ease), border-color var(--ease);
       cursor: pointer;
+      user-select: none;
     }
-    .tc::after {
+    .tc::before {
       content: '';
       position: absolute; top: 0; left: 0; right: 0;
-      height: 2.5px;
-      background: var(--y);
+      height: 2px; background: var(--y);
       transform: scaleX(0); transform-origin: left;
       transition: transform var(--ease);
     }
-    .tc.blue-top::after { background: var(--blu); }
-    .tc:hover {
-      box-shadow: var(--shh);
-      border-color: rgba(255,214,0,.35);
-      transform: translateY(-2px);
-    }
-    .tc:hover::after { transform: scaleX(1); }
+    .tc.acc-blue::before { background: var(--blu); }
+    .tc:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.1); border-color: rgba(255,214,0,.35); }
+    .tc:hover::before { transform: scaleX(1); }
+    .tc.disabled { opacity: .42; pointer-events: none; }
+    .tc.hidden-tool { display: none; }
+
+    /* drag states */
+    .tc.dragging { opacity: .35; transform: scale(.97); }
+    .tc.drag-over { border-color: var(--y); box-shadow: 0 0 0 2px rgba(255,214,0,.3); }
 
     .tc-top { display: flex; align-items: center; justify-content: space-between; }
     .tc-icon {
-      width: 36px; height: 36px; border-radius: 9px;
+      width: 38px; height: 38px; border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
       font-size: 18px; flex-shrink: 0;
     }
-    .ic-y  { background: rgba(255,214,0,.14); }
-    .ic-b  { background: rgba(30,58,138,.1); }
-    .ic-g  { background: rgba(16,185,129,.1); }
-    .ic-o  { background: rgba(249,115,22,.1); }
-    .ic-p  { background: rgba(139,92,246,.1); }
-    .ic-r  { background: rgba(239,68,68,.1); }
+    .iy { background: rgba(255,214,0,.13); }
+    .ib { background: rgba(30,58,138,.09); }
+    .ig { background: rgba(16,185,129,.09); }
+    .io { background: rgba(249,115,22,.09); }
+    .ip { background: rgba(139,92,246,.09); }
+    .ir { background: rgba(239,68,68,.09); }
 
-    .tc-name {
-      font-size: 13px; font-weight: 700;
-      color: var(--txt); line-height: 1.2;
-    }
-    .tc-footer {
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .badge {
-      font-size: 9px; font-weight: 600;
-      padding: 3px 7px; border-radius: 20px;
-      letter-spacing: .2px;
-    }
-    .b-live  { background: rgba(16,185,129,.12); color: #059669; }
-    .b-beta  { background: rgba(30,58,138,.12);  color: var(--blu); }
-    .b-soon  { background: rgba(249,115,22,.1);  color: #d97706; }
+    .tc-name { font-size: 13px; font-weight: 700; color: var(--txt); line-height: 1.2; }
+
+    .tc-foot { display: flex; align-items: center; justify-content: space-between; }
+    .badge { font-size: 9px; font-weight: 600; padding: 2px 7px; border-radius: 20px; letter-spacing: .2px; }
+    .bl { background: rgba(16,185,129,.11); color: #059669; }
+    .bb { background: rgba(30,58,138,.11); color: var(--blu); }
+    .bs { background: rgba(249,115,22,.09); color: #c2640a; }
 
     .open-btn {
       font-size: 10px; font-weight: 700;
       background: var(--blk); color: var(--y);
-      padding: 5px 11px; border-radius: 6px;
+      padding: 5px 12px; border-radius: 6px;
       letter-spacing: .3px; transition: var(--ease);
       text-transform: uppercase;
     }
     .open-btn:hover { background: var(--y); color: var(--blk); }
 
     /* card stagger */
-    .tc:nth-child(1) { animation: fadeUp .4s .14s ease both; }
-    .tc:nth-child(2) { animation: fadeUp .4s .18s ease both; }
-    .tc:nth-child(3) { animation: fadeUp .4s .22s ease both; }
-    .tc:nth-child(4) { animation: fadeUp .4s .26s ease both; }
-    .tc:nth-child(5) { animation: fadeUp .4s .30s ease both; }
-    .tc:nth-child(6) { animation: fadeUp .4s .34s ease both; }
-    .tc:nth-child(7) { animation: fadeUp .4s .38s ease both; }
-    .tc:nth-child(8) { animation: fadeUp .4s .42s ease both; }
+    .tc:nth-child(1){animation:fu .35s .10s ease both}
+    .tc:nth-child(2){animation:fu .35s .14s ease both}
+    .tc:nth-child(3){animation:fu .35s .18s ease both}
+    .tc:nth-child(4){animation:fu .35s .22s ease both}
+    .tc:nth-child(5){animation:fu .35s .26s ease both}
+    .tc:nth-child(6){animation:fu .35s .30s ease both}
+    .tc:nth-child(7){animation:fu .35s .34s ease both}
+    .tc:nth-child(8){animation:fu .35s .38s ease both}
 
-    /* ─── FOOTER ───────────────────────────────────────────── */
-    .footer {
-      text-align: center; margin-top: 40px;
-      padding-top: 20px; border-top: 1px solid var(--bdr);
-      font-size: 11px; color: #bbb;
+    /* ── SETTINGS PANEL ─────────────────────────────── */
+    .overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.5);
+      z-index: 400; opacity: 0; pointer-events: none;
+      transition: opacity .25s;
     }
-    .footer strong { color: var(--muted); font-weight: 600; }
+    .overlay.open { opacity: 1; pointer-events: all; }
 
-    /* ─── TOAST ────────────────────────────────────────────── */
+    .settings-panel {
+      position: fixed; top: 0; right: 0; bottom: 0;
+      width: min(360px, 95vw);
+      background: var(--wht);
+      z-index: 500;
+      transform: translateX(100%);
+      transition: transform .3s cubic-bezier(.4,0,.2,1);
+      display: flex; flex-direction: column;
+      box-shadow: -8px 0 32px rgba(0,0,0,.15);
+    }
+    .settings-panel.open { transform: translateX(0); }
+
+    .sp-head {
+      background: var(--blk);
+      padding: 16px 18px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 2px solid var(--y);
+      flex-shrink: 0;
+    }
+    .sp-title { font-size: 15px; font-weight: 700; color: var(--y); letter-spacing: .5px; }
+    .sp-close {
+      width: 30px; height: 30px;
+      background: rgba(255,255,255,.08);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,.6); font-size: 16px;
+      transition: var(--ease);
+    }
+    .sp-close:hover { background: rgba(255,214,0,.2); color: var(--y); }
+
+    .sp-body { flex: 1; overflow-y: auto; padding: 14px 16px; }
+    .sp-section-title {
+      font-size: 10px; font-weight: 700;
+      color: var(--sub); text-transform: uppercase;
+      letter-spacing: .8px; margin-bottom: 10px;
+    }
+
+    /* settings list items */
+    .sp-item {
+      background: #F7F8FA;
+      border: 1.5px solid var(--bdr);
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 8px;
+      cursor: grab;
+      transition: var(--ease);
+    }
+    .sp-item:active { cursor: grabbing; }
+    .sp-item.dragging-sp { opacity: .3; }
+    .sp-item.drag-over-sp { border-color: var(--y); background: var(--yg); }
+
+    .sp-drag { color: #ccc; font-size: 14px; flex-shrink: 0; cursor: grab; }
+    .sp-icon { font-size: 16px; flex-shrink: 0; }
+    .sp-name { font-size: 12px; font-weight: 600; color: var(--txt); flex: 1; }
+    .sp-status { font-size: 9px; font-weight: 600; color: var(--sub); }
+
+    /* toggle switch */
+    .toggle {
+      position: relative; width: 36px; height: 20px; flex-shrink: 0;
+    }
+    .toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .toggle-track {
+      position: absolute; inset: 0;
+      background: #D1D5DB; border-radius: 20px;
+      transition: var(--ease); cursor: pointer;
+    }
+    .toggle-track::after {
+      content: '';
+      position: absolute; top: 3px; left: 3px;
+      width: 14px; height: 14px;
+      background: var(--wht); border-radius: 50%;
+      transition: var(--ease);
+      box-shadow: 0 1px 3px rgba(0,0,0,.2);
+    }
+    .toggle input:checked + .toggle-track { background: var(--blk); }
+    .toggle input:checked + .toggle-track::after { transform: translateX(16px); }
+
+    .sp-foot {
+      padding: 14px 16px;
+      border-top: 1px solid var(--bdr);
+      flex-shrink: 0;
+    }
+    .sp-save {
+      width: 100%;
+      background: var(--blk); color: var(--y);
+      font-size: 13px; font-weight: 700;
+      padding: 12px; border-radius: 10px;
+      letter-spacing: .5px; transition: var(--ease);
+      text-transform: uppercase;
+    }
+    .sp-save:hover { background: var(--y); color: var(--blk); }
+
+    /* ── FOOTER ─────────────────────────────────────── */
+    .footer {
+      text-align: center; margin-top: 32px;
+      font-size: 10px; color: #bbb;
+      border-top: 1px solid var(--bdr);
+      padding-top: 16px;
+    }
+
+    /* ── TOAST ──────────────────────────────────────── */
     .toast {
       position: fixed; bottom: 20px; left: 50%;
-      transform: translateX(-50%) translateY(70px);
+      transform: translateX(-50%) translateY(60px);
       background: var(--blk); color: var(--y);
       font-size: 12px; font-weight: 600;
-      padding: 10px 20px; border-radius: 30px;
-      border: 1.5px solid rgba(255,214,0,.4);
-      z-index: 999; white-space: nowrap;
-      transition: transform .3s cubic-bezier(.4,0,.2,1);
-      pointer-events: none;
+      padding: 9px 20px; border-radius: 30px;
+      border: 1.5px solid rgba(255,214,0,.35);
+      z-index: 999; pointer-events: none; white-space: nowrap;
+      transition: transform .28s cubic-bezier(.4,0,.2,1);
     }
     .toast.show { transform: translateX(-50%) translateY(0); }
 
-    /* ─── KEYFRAMES ────────────────────────────────────────── */
-    @keyframes pulse {
-      0%,100% { opacity:1; transform:scale(1); }
-      50%      { opacity:.4; transform:scale(1.4); }
+    /* ── ANIMATIONS ─────────────────────────────────── */
+    @keyframes fu {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
-    @keyframes fadeUp {
-      from { opacity:0; transform:translateY(12px); }
-      to   { opacity:1; transform:translateY(0); }
-    }
-
-    /* ─── SCROLLBAR ────────────────────────────────────────── */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-thumb { background: var(--bdr); border-radius: 4px; }
   </style>
 </head>
 <body>
 
-  <!-- ── HEADER ───────────────────────────────────────────── -->
-  <header class="hdr">
-    <div class="hdr-left">
-      <div class="logo-img" id="logoBox">
-        <img src="photo/logo.png" alt="AMP KART"
-             onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';" />
-        <span class="fallback" id="logoFallback" style="display:none;">AK</span>
+<!-- ── HEADER ─────────────────────────────────────────── -->
+<header class="hdr">
+  <div class="hdr-left">
+    <div class="logo">
+      <img src="photo/logo.png" alt="" onerror="this.parentElement.textContent='AK'" />
+    </div>
+    <div>
+      <div class="brand">AMP KART</div>
+      <div class="brand-sub">Advanced Market Platform</div>
+    </div>
+  </div>
+  <div class="hdr-right">
+    <span class="badge-int">● Internal</span>
+    <button class="settings-btn" onclick="openSettings()" title="Settings">⚙️</button>
+  </div>
+</header>
+
+<!-- ── PAGE ───────────────────────────────────────────── -->
+<main class="page">
+  <div class="wrap">
+
+    <!-- HERO STRIP -->
+    <div class="hero-strip">
+      <div class="hero-left">
+        <div class="hero-title">TOOL <em>OS</em></div>
+        <div class="hero-sub">AMP KART Control Panel · All tools in one place</div>
       </div>
-      <div>
-        <div class="brand-name">AMP KART</div>
-        <div class="brand-sub">Advanced Market Platform</div>
+      <div class="hero-right">
+        <div class="metric">
+          <div class="metric-val" id="m-live">3</div>
+          <div class="metric-lbl">Live</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val w" id="m-total">8</div>
+          <div class="metric-lbl">Total</div>
+        </div>
       </div>
     </div>
-    <span class="badge-int">● Internal</span>
-  </header>
 
-  <!-- ── PAGE ─────────────────────────────────────────────── -->
-  <main class="page">
-    <div class="wrap">
+    <!-- TOOL GRID -->
+    <div class="grid-wrap">
+      <div class="tool-grid" id="toolGrid"></div>
+    </div>
 
-      <!-- HERO / CONTROL PANEL -->
-      <section class="hero">
-        <div class="hero-top">
-          <div class="hero-info">
-            <div class="hero-tag"><span class="hero-tag-dot"></span> Control Panel</div>
-            <h1 class="hero-title">DASH<span>BOARD</span></h1>
-            <p class="hero-sub">Manage tools &amp; operations</p>
-          </div>
-        </div>
-        <div class="metrics">
-          <div class="metric">
-            <span class="metric-lbl">Orders Today</span>
-            <span class="metric-val white" id="m-orders">—</span>
-            <span class="metric-delta">Live data</span>
-          </div>
-          <div class="metric">
-            <span class="metric-lbl">Revenue Today</span>
-            <span class="metric-val" id="m-revenue">—</span>
-            <span class="metric-delta">Live data</span>
-          </div>
-          <div class="metric">
-            <span class="metric-lbl">Profit Today</span>
-            <span class="metric-val" id="m-profit">—</span>
-            <span class="metric-delta">Live data</span>
-          </div>
-          <div class="metric">
-            <span class="metric-lbl">Active Tools</span>
-            <span class="metric-val white">3</span>
-            <span class="metric-delta">of 8 total</span>
-          </div>
-        </div>
-      </section>
+  </div><!-- /wrap -->
+</main>
 
-      <!-- RECENT ACTIVITY -->
-      <section class="activity-box">
-        <div class="sec-head">
-          <span class="sec-title">Recent Activity</span>
-          <button onclick="clearActivity()" style="font-size:10px;background:none;color:var(--muted);padding:0;font-family:var(--f);cursor:pointer;">Clear all</button>
-        </div>
-        <div class="activity-list" id="activityList">
-          <div class="act-empty"><span>🕒</span>No recent activity</div>
-        </div>
-      </section>
+<!-- ── FOOTER ──────────────────────────────────────────── -->
+<footer class="footer">
+  <strong style="color:var(--sub)">AMP KART INTERNAL SYSTEM</strong> &nbsp;·&nbsp; Tool OS v3.0 &nbsp;·&nbsp; © 2025
+</footer>
 
-      <!-- QUICK ACCESS -->
-      <div class="sec-head">
-        <span class="sec-title">Quick Access</span>
+<!-- ── SETTINGS OVERLAY + PANEL ───────────────────────── -->
+<div class="overlay" id="overlay" onclick="closeSettings()"></div>
+
+<aside class="settings-panel" id="settingsPanel">
+  <div class="sp-head">
+    <span class="sp-title">⚙ SETTINGS</span>
+    <button class="sp-close" onclick="closeSettings()">✕</button>
+  </div>
+  <div class="sp-body">
+    <div class="sp-section-title">Reorder & Manage Tools</div>
+    <div id="spList"></div>
+  </div>
+  <div class="sp-foot">
+    <button class="sp-save" onclick="saveSettings()">Save &amp; Apply</button>
+  </div>
+</aside>
+
+<!-- ── TOAST ───────────────────────────────────────────── -->
+<div class="toast" id="toast"></div>
+
+<!-- ── SCRIPT ──────────────────────────────────────────── -->
+<script>
+/* ════════════════════════════════════════════════
+   TOOL CONFIG — update only links & details here
+   ════════════════════════════════════════════════ */
+
+
+const TOOLS_DEFAULT = [
+  { 
+    id:'calculator', 
+    name:'Pricing Calculator', 
+    icon:`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255, 215, 0, 0.1)"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M8 18h.01M12 18h.01"/></g><g stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M8 18h.01M12 18h.01"/></g></svg>`, 
+    ic:'iy', url:'/calculator.html', status:'live', enabled:true 
+  },
+  { 
+    id:'compressor', 
+    name:'Image Compressor', 
+    icon:`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255, 215, 0, 0.1)"><path d="M8 3v3a2 2 0 0 1-2 2H3M21 8h-3a2 2 0 0 1-2-2V3M3 16h3a2 2 0 0 1 2 2v3M16 21v-3a2 2 0 0 1 2-2h3"/><rect x="8" y="8" width="8" height="8" rx="1"/></g><g stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M8 3v3a2 2 0 0 1-2 2H3M21 8h-3a2 2 0 0 1-2-2V3M3 16h3a2 2 0 0 1 2 2v3M16 21v-3a2 2 0 0 1 2-2h3"/><rect x="8" y="8" width="8" height="8" rx="1"/></g></svg>`, 
+    ic:'ib', url:'/compressor.html', status:'live', enabled:true 
+  },
+  { 
+    id:'qr', 
+    name:'QR Generator', 
+    icon:`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255, 215, 0, 0.1)"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h.01M18 14h.01M14 18h.01M18 18h.01"/></g><g stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h.01M18 14h.01M14 18h.01M18 18h.01"/></g></svg>`, 
+    ic:'ig', url:'/qr.html', status:'live', enabled:true 
+  },
+  { 
+    id:'profit', 
+    name:'Profit Analyzer', 
+    icon:`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255, 215, 0, 0.1)"><rect x="10" y="10" width="4" height="10" rx="1"/><rect x="17" y="4" width="4" height="16" rx="1"/><rect x="3" y="16" width="4" height="4" rx="1"/></g><g stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><rect x="10" y="10" width="4" height="10" rx="1"/><rect x="17" y="4" width="4" height="16" rx="1"/><rect x="3" y="16" width="4" height="4" rx="1"/></g></svg>`, 
+    ic:'io', url:'/profit.html', status:'beta', enabled:true 
+  },
+  { 
+    id:'orders', 
+    name:'Order Tracker', 
+    icon:`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255, 215, 0, 0.1)"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></g><g stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></g></svg>`, 
+    ic:'ib', url:'/orders.html', status:'soon', enabled:true 
+  },
+  { 
+    id:'products', 
+    name:'Product Manager', 
+    icon:`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255, 215, 0, 0.1)"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></g><g stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></g></svg>`, 
+    ic:'ip', url:'/products.html', status:'soon', enabled:true 
+  },
+  { 
+    id:'invoice', 
+    name:'Invoice Builder', 
+    icon:`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255, 215, 0, 0.1)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><path d="M10 9H8"/></g><g stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><path d="M10 9H8"/></g></svg>`, 
+    ic:'ig', url:'/invoice.html', status:'soon', enabled:true 
+  },
+  { 
+    id:'reports', 
+    name:'Sales Reports', 
+    icon:`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255, 215, 0, 0.1)"><polyline points="2 12 6 12 9 3 15 21 18 12 22 12"/></g><g stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><polyline points="2 12 6 12 9 3 15 21 18 12 22 12"/></g></svg>`, 
+    ic:'ir', url:'/reports.html', status:'soon', enabled:true 
+  }
+];
+
+
+
+
+const STORE_KEY = 'ampkart_tools_v3';
+
+/* ── LOAD / SAVE CONFIG ─────────────────────────────── */
+function loadConfig() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (!raw) return TOOLS_DEFAULT.map(t => ({...t}));
+    const saved = JSON.parse(raw);
+    // Merge: keep order+enabled from saved, fill rest from default
+    return saved.map(s => {
+      const def = TOOLS_DEFAULT.find(d => d.id === s.id);
+      return def ? { ...def, enabled: s.enabled } : null;
+    }).filter(Boolean);
+  } catch { return TOOLS_DEFAULT.map(t => ({...t})); }
+}
+
+function saveConfig(tools) {
+  localStorage.setItem(STORE_KEY, JSON.stringify(
+    tools.map(t => ({ id: t.id, enabled: t.enabled }))
+  ));
+}
+
+let tools = loadConfig();
+
+/* ── STATUS HELPERS ─────────────────────────────────── */
+const badgeMap = {
+  live: '<span class="badge bl">● Live</span>',
+  beta: '<span class="badge bb">⬡ Beta</span>',
+  soon: '<span class="badge bs">◌ Soon</span>',
+};
+function accentClass(t) { return t.status === 'beta' || t.id === 'compressor' || t.id === 'orders' ? 'acc-blue' : ''; }
+
+/* ── RENDER TOOL GRID ───────────────────────────────── */
+function renderGrid() {
+  const grid = document.getElementById('toolGrid');
+  grid.innerHTML = '';
+  tools.forEach((t, i) => {
+    if (!t.enabled) return;
+    const div = document.createElement('div');
+    div.className = `tc ${accentClass(t)}`;
+    div.dataset.id = t.id;
+    div.dataset.idx = i;
+    div.innerHTML = `
+      <div class="tc-top">
+        <div class="tc-icon ${t.ic}">${t.icon}</div>
+        ${badgeMap[t.status]}
       </div>
-      <div class="quick-grid">
-        <button class="q-btn ql" onclick="openTool('Calculator','🧮','/calculator.html')">
-          <span class="qi">🧮</span> Calculator
-        </button>
-        <button class="q-btn" onclick="openTool('QR Generator','📱','/qr.html')">
-          <span class="qi">📱</span> QR Generator
-        </button>
-        <button class="q-btn" onclick="openTool('Compressor','🗜️','/compressor.html')">
-          <span class="qi">🗜️</span> Compressor
-        </button>
-        <button class="q-btn" onclick="openTool('Profit Analyzer','📊','/profit.html')">
-          <span class="qi">📊</span> Profit Analyzer
-        </button>
-      </div>
+      <span class="tc-name">${t.name}</span>
+      <div class="tc-foot">
+        <button class="open-btn" data-url="${t.url}" data-name="${t.name}" data-status="${t.status}">Open</button>
+      </div>`;
+    grid.appendChild(div);
+  });
 
-      <!-- ALL TOOLS -->
-      <div class="sec-head" style="margin-top:6px;">
-        <span class="sec-title">All Tools</span>
-        <span class="sec-count">8 tools</span>
-      </div>
-
-      <div class="tool-grid">
-
-        <div class="tc" onclick="openTool('Calculator','🧮','/calculator.html')">
-          <div class="tc-top">
-            <div class="tc-icon ic-y">🧮</div>
-            <span class="badge b-live">● Live</span>
-          </div>
-          <span class="tc-name">Pricing Calculator</span>
-          <div class="tc-footer">
-            <button class="open-btn" onclick="openTool('Calculator','🧮','/calculator.html');event.stopPropagation()">Open</button>
-          </div>
-        </div>
-
-        <div class="tc blue-top" onclick="openTool('Compressor','🗜️','/compressor.html')">
-          <div class="tc-top">
-            <div class="tc-icon ic-b">🗜️</div>
-            <span class="badge b-live">● Live</span>
-          </div>
-          <span class="tc-name">Image Compressor</span>
-          <div class="tc-footer">
-            <button class="open-btn" onclick="openTool('Compressor','🗜️','/compressor.html');event.stopPropagation()">Open</button>
-          </div>
-        </div>
-
-        <div class="tc" onclick="openTool('QR Generator','📱','/qr.html')">
-          <div class="tc-top">
-            <div class="tc-icon ic-g">📱</div>
-            <span class="badge b-live">● Live</span>
-          </div>
-          <span class="tc-name">QR Generator</span>
-          <div class="tc-footer">
-            <button class="open-btn" onclick="openTool('QR Generator','📱','/qr.html');event.stopPropagation()">Open</button>
-          </div>
-        </div>
-
-        <div class="tc" onclick="openTool('Profit Analyzer','📊','/profit.html')">
-          <div class="tc-top">
-            <div class="tc-icon ic-o">📊</div>
-            <span class="badge b-beta">⬡ Beta</span>
-          </div>
-          <span class="tc-name">Profit Analyzer</span>
-          <div class="tc-footer">
-            <button class="open-btn" onclick="openTool('Profit Analyzer','📊','/profit.html');event.stopPropagation()">Open</button>
-          </div>
-        </div>
-
-        <div class="tc blue-top" onclick="showToast('Order Tracker — Coming Soon!')">
-          <div class="tc-top">
-            <div class="tc-icon ic-b">📦</div>
-            <span class="badge b-soon">◌ Soon</span>
-          </div>
-          <span class="tc-name">Order Tracker</span>
-          <div class="tc-footer">
-            <button class="open-btn" onclick="showToast('Order Tracker — Coming Soon!');event.stopPropagation()">Open</button>
-          </div>
-        </div>
-
-        <div class="tc" onclick="showToast('Product Manager — Coming Soon!')">
-          <div class="tc-top">
-            <div class="tc-icon ic-p">🏷️</div>
-            <span class="badge b-soon">◌ Soon</span>
-          </div>
-          <span class="tc-name">Product Manager</span>
-          <div class="tc-footer">
-            <button class="open-btn" onclick="showToast('Product Manager — Coming Soon!');event.stopPropagation()">Open</button>
-          </div>
-        </div>
-
-        <div class="tc" onclick="showToast('Invoice Builder — Coming Soon!')">
-          <div class="tc-top">
-            <div class="tc-icon ic-g">🧾</div>
-            <span class="badge b-soon">◌ Soon</span>
-          </div>
-          <span class="tc-name">Invoice Builder</span>
-          <div class="tc-footer">
-            <button class="open-btn" onclick="showToast('Invoice Builder — Coming Soon!');event.stopPropagation()">Open</button>
-          </div>
-        </div>
-
-        <div class="tc blue-top" onclick="showToast('Sales Reports — Coming Soon!')">
-          <div class="tc-top">
-            <div class="tc-icon ic-r">📈</div>
-            <span class="badge b-soon">◌ Soon</span>
-          </div>
-          <span class="tc-name">Sales Reports</span>
-          <div class="tc-footer">
-            <button class="open-btn" onclick="showToast('Sales Reports — Coming Soon!');event.stopPropagation()">Open</button>
-          </div>
-        </div>
-
-      </div><!-- /tool-grid -->
-
-    </div><!-- /wrap -->
-  </main>
-
-  <!-- ── FOOTER ────────────────────────────────────────────── -->
-  <footer class="footer">
-    <strong>AMP KART INTERNAL SYSTEM</strong> &nbsp;·&nbsp; v2.0.0 &nbsp;·&nbsp; © 2025 AMP KART
-  </footer>
-
-  <!-- ── TOAST ─────────────────────────────────────────────── -->
-  <div class="toast" id="toast"></div>
-
-  <!-- ── SCRIPTS ───────────────────────────────────────────── -->
-  <script>
-    /* ── ACTIVITY STORE ────────────────────────────────── */
-    const ACT_KEY = 'ampkart_activity';
-    const MAX_ACT = 5;
-
-    function getActivity() {
-      try { return JSON.parse(localStorage.getItem(ACT_KEY) || '[]'); }
-      catch { return []; }
-    }
-
-    function saveActivity(name, icon) {
-      let acts = getActivity();
-      acts.unshift({ name, icon, time: Date.now() });
-      if (acts.length > MAX_ACT) acts = acts.slice(0, MAX_ACT);
-      localStorage.setItem(ACT_KEY, JSON.stringify(acts));
-      renderActivity();
-    }
-
-    function clearActivity() {
-      localStorage.removeItem(ACT_KEY);
-      renderActivity();
-    }
-
-    function relTime(ts) {
-      const diff = Math.floor((Date.now() - ts) / 1000);
-      if (diff < 60)  return 'Just now';
-      if (diff < 3600) return `${Math.floor(diff/60)}m ago`;
-      if (diff < 86400) return `${Math.floor(diff/3600)}h ago`;
-      return `${Math.floor(diff/86400)}d ago`;
-    }
-
-    function renderActivity() {
-      const list = document.getElementById('activityList');
-      const acts = getActivity();
-      if (!acts.length) {
-        list.innerHTML = '<div class="act-empty"><span>🕒</span>No recent activity</div>';
-        return;
-      }
-      list.innerHTML = acts.map(a => `
-        <div class="act-item">
-          <div class="act-icon">${a.icon}</div>
-          <div class="act-info">
-            <div class="act-name">${a.name} opened</div>
-            <div class="act-time">${relTime(a.time)}</div>
-          </div>
-          <div class="act-dot"></div>
-        </div>
-      `).join('');
-    }
-
-    /* ── TOOL NAVIGATION ───────────────────────────────── */
-    function openTool(name, icon, url) {
-      saveActivity(name, icon);
+  // Attach open btn events
+  grid.querySelectorAll('.open-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const { url, name, status } = btn.dataset;
+      if (status === 'soon') { showToast(`${name} — Coming Soon!`); return; }
       window.location.href = url;
-    }
-
-    /* ── TOAST ─────────────────────────────────────────── */
-    let toastT;
-    function showToast(msg) {
-      const t = document.getElementById('toast');
-      clearTimeout(toastT);
-      t.textContent = msg;
-      t.classList.add('show');
-      toastT = setTimeout(() => t.classList.remove('show'), 2600);
-    }
-
-    /* ── METRICS STUB ──────────────────────────────────── */
-    // Replace with Firebase / API fetch when ready
-    function loadMetrics() {
-      // Placeholder — connect to Firestore or REST API
-      // document.getElementById('m-orders').textContent  = data.orders;
-      // document.getElementById('m-revenue').textContent = '₹' + data.revenue;
-      // document.getElementById('m-profit').textContent  = '₹' + data.profit;
-    }
-
-    /* ── MOBILE TAP FEEDBACK ───────────────────────────── */
-    document.querySelectorAll('.tc').forEach(c => {
-      c.addEventListener('pointerdown', function() {
-        this.style.transform = 'scale(.97)';
-        setTimeout(() => this.style.transform = '', 130);
-      });
     });
+  });
 
-    /* ── INIT ──────────────────────────────────────────── */
-    renderActivity();
-    loadMetrics();
+  // Card click
+  grid.querySelectorAll('.tc').forEach(card => {
+    card.addEventListener('click', () => {
+      const btn = card.querySelector('.open-btn');
+      btn && btn.click();
+    });
+    // Mobile tap feedback
+    card.addEventListener('pointerdown', function() {
+      this.style.transform = 'scale(.97)';
+      setTimeout(() => this.style.transform = '', 120);
+    });
+  });
 
-    // Refresh timestamps every 30s
-    setInterval(renderActivity, 30000);
+  // Update live count
+  document.getElementById('m-live').textContent = tools.filter(t => t.status === 'live' && t.enabled).length;
+  document.getElementById('m-total').textContent = tools.filter(t => t.enabled).length;
+}
 
-    /*
-    ─────────────────────────────────────────────
-    FIREBASE READY STRUCTURE
-    ─────────────────────────────────────────────
-    import { initializeApp } from 'firebase/app';
-    import { getFirestore, collection, getDocs, addDoc } from 'firebase/firestore';
+/* ── SETTINGS PANEL ─────────────────────────────────── */
+function openSettings() {
+  renderSpList();
+  document.getElementById('settingsPanel').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeSettings() {
+  document.getElementById('settingsPanel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
 
-    const db = getFirestore(initializeApp(firebaseConfig));
+function renderSpList() {
+  const list = document.getElementById('spList');
+  list.innerHTML = '';
+  tools.forEach((t, i) => {
+    const div = document.createElement('div');
+    div.className = 'sp-item';
+    div.draggable = true;
+    div.dataset.id = t.id;
+    div.dataset.spIdx = i;
+    div.innerHTML = `
+      <span class="sp-drag">⠿</span>
+      <span class="sp-icon">${t.icon}</span>
+      <span class="sp-name">${t.name}</span>
+      <span class="sp-status">${t.status.toUpperCase()}</span>
+      <label class="toggle">
+        <input type="checkbox" ${t.enabled ? 'checked' : ''} data-id="${t.id}" />
+        <div class="toggle-track"></div>
+      </label>`;
+    list.appendChild(div);
+  });
 
-    async function loadMetrics() {
-      const snap = await getDocs(collection(db, 'metrics'));
-      snap.forEach(doc => {
-        const d = doc.data();
-        document.getElementById('m-orders').textContent  = d.orders;
-        document.getElementById('m-revenue').textContent = '₹' + d.revenue;
-        document.getElementById('m-profit').textContent  = '₹' + d.profit;
-      });
-    }
+  // Drag reorder in settings panel
+  let dragSrc = null;
+  list.querySelectorAll('.sp-item').forEach(item => {
+    item.addEventListener('dragstart', e => {
+      dragSrc = item;
+      setTimeout(() => item.classList.add('dragging-sp'), 0);
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    item.addEventListener('dragend', () => {
+      item.classList.remove('dragging-sp');
+      list.querySelectorAll('.sp-item').forEach(i => i.classList.remove('drag-over-sp'));
+    });
+    item.addEventListener('dragover', e => {
+      e.preventDefault();
+      if (item !== dragSrc) {
+        list.querySelectorAll('.sp-item').forEach(i => i.classList.remove('drag-over-sp'));
+        item.classList.add('drag-over-sp');
+      }
+    });
+    item.addEventListener('drop', e => {
+      e.preventDefault();
+      if (item === dragSrc) return;
+      item.classList.remove('drag-over-sp');
+      // Reorder tools array
+      const fromId = dragSrc.dataset.id;
+      const toId   = item.dataset.id;
+      const fromI  = tools.findIndex(t => t.id === fromId);
+      const toI    = tools.findIndex(t => t.id === toId);
+      const [moved] = tools.splice(fromI, 1);
+      tools.splice(toI, 0, moved);
+      renderSpList();
+    });
+  });
+}
 
-    async function logToolUsage(name) {
-      await addDoc(collection(db, 'analytics'), {
-        tool: name, timestamp: new Date()
-      });
-    }
-    ─────────────────────────────────────────────
-    */
-  </script>
+function saveSettings() {
+  // Read toggle states
+  document.querySelectorAll('#spList .toggle input').forEach(inp => {
+    const t = tools.find(x => x.id === inp.dataset.id);
+    if (t) t.enabled = inp.checked;
+  });
+  saveConfig(tools);
+  renderGrid();
+  closeSettings();
+  showToast('Settings saved ✓');
+}
 
+/* ── TOAST ──────────────────────────────────────────── */
+let toastT;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  clearTimeout(toastT);
+  el.textContent = msg;
+  el.classList.add('show');
+  toastT = setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+/* ── INIT ───────────────────────────────────────────── */
+renderGrid();
+
+/*
+══════════════════════════════════════════════════
+FIREBASE READY STRUCTURE
+══════════════════════════════════════════════════
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
+
+const db = getFirestore(initializeApp(firebaseConfig));
+
+async function loadToolsFromFirebase() {
+  const snap = await getDocs(collection(db, 'tools'));
+  tools = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  renderGrid();
+}
+loadToolsFromFirebase();
+══════════════════════════════════════════════════
+*/
+</script>
 </body>
 </html>

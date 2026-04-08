@@ -273,8 +273,9 @@ async function loadDefaultLogo() {
       resolve(false);
     };
 
-    // Bust cache to avoid stale 404
-    img.src = `./images/logo.jpg?v=${Date.now()}`;
+     // Default logo path set to Photo/logo.png
+    img.src = `Photo/logo.png?v=${Date.now()}`;
+
   });
 }
 
