@@ -1,7 +1,7 @@
 {
-  "name": "AMP KART Tool OS",
-  "short_name": "AMP KART",
-  "start_url": "./index.html",
+  "name": "AMP Tool",
+  "short_name": "AMP atool",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#EBEBEE",
   "theme_color": "#000000",
@@ -11,13 +11,13 @@
       "src": "https://ik.imagekit.io/nsyr92pse/1000201093-optimized.jpg",
       "sizes": "192x192",
       "type": "image/jpeg",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "https://ik.imagekit.io/nsyr92pse/1000201093-optimized.jpg",
       "sizes": "512x512",
       "type": "image/jpeg",
-      "purpose": "any maskable"
+      "purpose": "maskable any"
     }
   ]
 }
