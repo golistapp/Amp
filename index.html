@@ -1,12 +1,11 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en">
-<!-- 🟢🟢 START UPDATE (Yahan se copy karein) 🟢🟢 -->
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AMP KART — Tool OS</title>
-
+  
   <!-- SOCIAL MEDIA META TAGS (WhatsApp, Facebook, Link sharing preview) -->
   <meta name="title" content="AMP KART — Tool OS" />
   <meta name="description" content="AMP KART Control Panel - All your business tools in one place. Pricing Calculator, Image Compressor, QR Generator & more." />
@@ -28,8 +27,6 @@
   <link rel="manifest" href="./manifest.json" />
 
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-
-
   <style>
     :root {
       --y:    #FFD600;
@@ -369,6 +366,7 @@
       <div class="brand-sub">Advanced Market Platform</div>
     </div>
   </div>
+
   <div class="hdr-right">
     <!-- PWA Install Button -->
     <button id="installAppBtn" class="install-btn" style="display: none;" title="Install App">
@@ -441,7 +439,6 @@
    TOOL CONFIG — update only links & details here
    ════════════════════════════════════════════════ */
 
-
 const TOOLS_DEFAULT = [
   { 
     id:'calculator', 
@@ -493,9 +490,6 @@ const TOOLS_DEFAULT = [
   }
 ];
 
-
-
-
 const STORE_KEY = 'ampkart_tools_v3';
 
 /* ── LOAD / SAVE CONFIG ─────────────────────────────── */
@@ -504,7 +498,6 @@ function loadConfig() {
     const raw = localStorage.getItem(STORE_KEY);
     if (!raw) return TOOLS_DEFAULT.map(t => ({...t}));
     const saved = JSON.parse(raw);
-    // Merge: keep order+enabled from saved, fill rest from default
     return saved.map(s => {
       const def = TOOLS_DEFAULT.find(d => d.id === s.id);
       return def ? { ...def, enabled: s.enabled } : null;
@@ -550,7 +543,6 @@ function renderGrid() {
     grid.appendChild(div);
   });
 
-  // Attach open btn events
   grid.querySelectorAll('.open-btn').forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();
@@ -560,20 +552,17 @@ function renderGrid() {
     });
   });
 
-  // Card click
   grid.querySelectorAll('.tc').forEach(card => {
     card.addEventListener('click', () => {
       const btn = card.querySelector('.open-btn');
       btn && btn.click();
     });
-    // Mobile tap feedback
     card.addEventListener('pointerdown', function() {
       this.style.transform = 'scale(.97)';
       setTimeout(() => this.style.transform = '', 120);
     });
   });
 
-  // Update live count
   document.getElementById('m-live').textContent = tools.filter(t => t.status === 'live' && t.enabled).length;
   document.getElementById('m-total').textContent = tools.filter(t => t.enabled).length;
 }
@@ -612,7 +601,6 @@ function renderSpList() {
     list.appendChild(div);
   });
 
-  // Drag reorder in settings panel
   let dragSrc = null;
   list.querySelectorAll('.sp-item').forEach(item => {
     item.addEventListener('dragstart', e => {
@@ -635,7 +623,6 @@ function renderSpList() {
       e.preventDefault();
       if (item === dragSrc) return;
       item.classList.remove('drag-over-sp');
-      // Reorder tools array
       const fromId = dragSrc.dataset.id;
       const toId   = item.dataset.id;
       const fromI  = tools.findIndex(t => t.id === fromId);
@@ -648,7 +635,6 @@ function renderSpList() {
 }
 
 function saveSettings() {
-  // Read toggle states
   document.querySelectorAll('#spList .toggle input').forEach(inp => {
     const t = tools.find(x => x.id === inp.dataset.id);
     if (t) t.enabled = inp.checked;
@@ -669,10 +655,15 @@ function showToast(msg) {
   toastT = setTimeout(() => el.classList.remove('show'), 2500);
 }
 
+/* ── INIT ───────────────────────────────────────────── */
+renderGrid();
+
 /* ── PWA INSTALL LOGIC ──────────────────────────────── */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(err => {
+    navigator.serviceWorker.register('./sw.js').then(reg => {
+      console.log('Service Worker Registered Successfully!', reg);
+    }).catch(err => {
       console.log('Service Worker registration failed: ', err);
     });
   });
@@ -682,46 +673,37 @@ let deferredPrompt;
 const installBtn = document.getElementById('installAppBtn');
 
 window.addEventListener('beforeinstallprompt', (e) => {
-  // Prevent the mini-infobar from appearing on mobile
+  // Browser ke default prompt ko roko
   e.preventDefault();
-  // Stash the event so it can be triggered later.
+  // Event ko save karo
   deferredPrompt = e;
-  // Update UI notify the user they can install the PWA
-  installBtn.style.display = 'flex';
+  // Apne custom install button ko show karo
+  if(installBtn) installBtn.style.display = 'flex';
+  console.log("PWA Install Ready: Button is shown.");
 });
 
-installBtn.addEventListener('click', async () => {
-  if (deferredPrompt) {
-    // Show the install prompt
-    deferredPrompt.prompt();
-    // Wait for the user to respond to the prompt
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
-      console.log('User accepted the install prompt');
-    } else {
-      console.log('User dismissed the install prompt');
+if(installBtn) {
+  installBtn.addEventListener('click', async () => {
+    if (deferredPrompt) {
+      // Prompt open karo
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(`User choice: ${outcome}`);
+      deferredPrompt = null;
+      installBtn.style.display = 'none';
     }
-    // We've used the prompt, and can't use it again, throw it away
-    deferredPrompt = null;
-    // Hide the button
-    installBtn.style.display = 'none';
-  }
-});
+  });
+}
 
 window.addEventListener('appinstalled', () => {
-  // Hide the app-provided install promotion
-  installBtn.style.display = 'none';
-  // Clear the deferredPrompt so it can be garbage collected
+  if(installBtn) installBtn.style.display = 'none';
   deferredPrompt = null;
-  // Optionally, send analytics event to indicate successful install
   showToast('App installed successfully! ✓');
 });
-
-/* ── INIT ───────────────────────────────────────────── */
-renderGrid();
 
 </script>
 </body>
 </html>
+
 
 ```
