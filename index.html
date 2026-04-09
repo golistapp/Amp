@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,7 +24,17 @@
   <meta name="twitter:image" content="https://ik.imagekit.io/nsyr92pse/1000201093-optimized.jpg" />
 
   <!-- PWA Manifest Link -->
-  <link rel="manifest" href="./manifest.json" />
+  <link rel="manifest" href="/manifest.json" />
+
+  <!-- PWA iOS / Safari Support -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="AMP KART" />
+  <link rel="apple-touch-icon" href="https://ik.imagekit.io/nsyr92pse/1000201093-optimized.jpg" />
+
+  <!-- PWA Chrome / Android -->
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="application-name" content="AMP KART" />
 
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
@@ -344,6 +354,81 @@
     }
     .toast.show { transform: translateX(-50%) translateY(0); }
 
+    /* ── PWA INSTALL BOTTOM BANNER ─────────────────────── */
+    .install-banner {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      z-index: 998;
+      background: var(--blk);
+      border-top: 2px solid var(--y);
+      padding: 14px 18px;
+      display: flex; align-items: center; gap: 12px;
+      transform: translateY(100%);
+      transition: transform .35s cubic-bezier(.4,0,.2,1);
+      box-shadow: 0 -8px 32px rgba(0,0,0,.3);
+    }
+    .install-banner.show { transform: translateY(0); }
+    .install-banner-icon {
+      width: 42px; height: 42px; border-radius: 10px;
+      background: var(--y); flex-shrink: 0; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 13px; color: var(--blk);
+    }
+    .install-banner-icon img { width: 100%; height: 100%; object-fit: cover; }
+    .install-banner-text { flex: 1; min-width: 0; }
+    .install-banner-title { font-size: 13px; font-weight: 700; color: var(--wht); line-height: 1.2; }
+    .install-banner-sub { font-size: 10px; color: rgba(255,255,255,.45); margin-top: 2px; }
+    .install-banner-actions { display: flex; gap: 8px; flex-shrink: 0; align-items: center; }
+    .btn-install-now {
+      background: var(--y); color: var(--blk);
+      font-size: 12px; font-weight: 700;
+      padding: 8px 16px; border-radius: 8px;
+      border: none; cursor: pointer;
+      letter-spacing: .3px; text-transform: uppercase;
+      transition: var(--ease); white-space: nowrap;
+    }
+    .btn-install-now:hover { background: var(--yd); }
+    .btn-install-now:active { transform: scale(.97); }
+    .btn-dismiss {
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      color: rgba(255,255,255,.5);
+      font-size: 18px; width: 32px; height: 32px;
+      border-radius: 8px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: var(--ease); flex-shrink: 0;
+    }
+    .btn-dismiss:hover { background: rgba(255,255,255,.14); color: var(--wht); }
+
+    /* ── PWA UPDATE BANNER ───────────────────────────────── */
+    .update-banner {
+      position: fixed; top: calc(var(--hh) + 6px); left: 50%;
+      transform: translateX(-50%) translateY(-80px);
+      z-index: 998;
+      background: #1a1a1a;
+      border: 1.5px solid rgba(255,214,0,.4);
+      border-radius: 12px;
+      padding: 10px 16px;
+      display: flex; align-items: center; gap: 10px;
+      transition: transform .3s cubic-bezier(.4,0,.2,1);
+      white-space: nowrap;
+      box-shadow: 0 8px 24px rgba(0,0,0,.4);
+    }
+    .update-banner.show { transform: translateX(-50%) translateY(0); }
+    .update-banner-text { font-size: 12px; font-weight: 600; color: rgba(255,255,255,.8); }
+    .btn-update {
+      background: var(--y); color: var(--blk);
+      font-size: 11px; font-weight: 700;
+      padding: 5px 12px; border-radius: 6px;
+      border: none; cursor: pointer;
+      letter-spacing: .3px; transition: var(--ease);
+    }
+    .btn-update:hover { background: var(--yd); }
+
+    @media(max-width:400px) {
+      .install-banner { padding: 12px 14px; gap: 10px; }
+      .btn-install-now { padding: 7px 12px; font-size: 11px; }
+    }
+
     /* ── ANIMATIONS ─────────────────────────────────── */
     @keyframes fu {
       from { opacity: 0; transform: translateY(10px); }
@@ -432,6 +517,27 @@
 
 <!-- ── TOAST ───────────────────────────────────────────── -->
 <div class="toast" id="toast"></div>
+
+<!-- ── PWA BOTTOM INSTALL BANNER ──────────────────────── -->
+<div class="install-banner" id="installBanner" role="dialog" aria-label="Install AMP KART app">
+  <div class="install-banner-icon">
+    <img src="https://ik.imagekit.io/nsyr92pse/1000201093-optimized.jpg" alt="AMP KART" onerror="this.parentElement.textContent='AK'" />
+  </div>
+  <div class="install-banner-text">
+    <div class="install-banner-title">Install AMP KART</div>
+    <div class="install-banner-sub">Add to home screen for best experience</div>
+  </div>
+  <div class="install-banner-actions">
+    <button class="btn-install-now" id="bannerInstallBtn">Install</button>
+    <button class="btn-dismiss" id="bannerDismissBtn" aria-label="Dismiss">✕</button>
+  </div>
+</div>
+
+<!-- ── PWA UPDATE BANNER ───────────────────────────────── -->
+<div class="update-banner" id="updateBanner" role="alert">
+  <span class="update-banner-text">🔄 New version available!</span>
+  <button class="btn-update" id="updateBtn">Update</button>
+</div>
 
 <!-- ── SCRIPT ──────────────────────────────────────────── -->
 <script>
@@ -658,52 +764,139 @@ function showToast(msg) {
 /* ── INIT ───────────────────────────────────────────── */
 renderGrid();
 
-/* ── PWA INSTALL LOGIC ──────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════
+   PWA SYSTEM — Production Grade
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── SERVICE WORKER REGISTRATION + UPDATE HANDLING ──────── */
+let swRegistration = null;
+
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').then(reg => {
-      console.log('Service Worker Registered Successfully!', reg);
-    }).catch(err => {
-      console.log('Service Worker registration failed: ', err);
-    });
-  });
-}
+  window.addEventListener('load', async () => {
+    try {
+      swRegistration = await navigator.serviceWorker.register('/sw.js', {
+        scope: '/',
+        updateViaCache: 'none'
+      });
+      console.log('[PWA] Service Worker registered:', swRegistration.scope);
 
-let deferredPrompt;
-const installBtn = document.getElementById('installAppBtn');
+      /* Proactively check for SW updates */
+      swRegistration.update().catch(() => {});
 
-window.addEventListener('beforeinstallprompt', (e) => {
-  // Browser ke default prompt ko roko
-  e.preventDefault();
-  // Event ko save karo
-  deferredPrompt = e;
-  // Apne custom install button ko show karo
-  if(installBtn) installBtn.style.display = 'flex';
-  console.log("PWA Install Ready: Button is shown.");
-});
+      /* New SW already waiting (e.g. user navigated back) */
+      if (swRegistration.waiting) showUpdateBanner();
 
-if(installBtn) {
-  installBtn.addEventListener('click', async () => {
-    if (deferredPrompt) {
-      // Prompt open karo
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      console.log(`User choice: ${outcome}`);
-      deferredPrompt = null;
-      installBtn.style.display = 'none';
+      /* New SW found during this session */
+      swRegistration.addEventListener('updatefound', () => {
+        const newSW = swRegistration.installing;
+        if (!newSW) return;
+        newSW.addEventListener('statechange', () => {
+          if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
+            showUpdateBanner();
+          }
+        });
+      });
+
+      /* After skipWaiting, reload so new SW takes over */
+      let refreshing = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!refreshing) { refreshing = true; window.location.reload(); }
+      });
+
+    } catch (err) {
+      console.warn('[PWA] SW registration failed:', err);
     }
   });
 }
 
-window.addEventListener('appinstalled', () => {
-  if(installBtn) installBtn.style.display = 'none';
-  deferredPrompt = null;
-  showToast('App installed successfully! ✓');
+/* ── UPDATE BANNER ───────────────────────────────────────── */
+function showUpdateBanner() {
+  const banner = document.getElementById('updateBanner');
+  if (banner) setTimeout(() => banner.classList.add('show'), 600);
+}
+
+document.getElementById('updateBtn')?.addEventListener('click', () => {
+  document.getElementById('updateBanner')?.classList.remove('show');
+  if (swRegistration?.waiting) {
+    swRegistration.waiting.postMessage({ type: 'SKIP_WAITING' });
+  }
 });
+
+/* ── INSTALL PROMPT SYSTEM ───────────────────────────────── */
+let deferredPrompt  = null;
+const DISMISS_KEY   = 'ampkart_install_dismissed_ts';
+
+function isStandalone() {
+  return window.matchMedia('(display-mode: standalone)').matches ||
+         window.navigator.standalone === true;
+}
+
+function wasDismissedRecently() {
+  const ts = localStorage.getItem(DISMISS_KEY);
+  return ts && (Date.now() - parseInt(ts)) < 3 * 24 * 60 * 60 * 1000;
+}
+
+function shouldShowInstall() {
+  return !isStandalone() && !wasDismissedRecently();
+}
+
+function showInstallUI() {
+  if (!shouldShowInstall()) return;
+  document.getElementById('installAppBtn').style.display = 'flex';
+  setTimeout(() => document.getElementById('installBanner')?.classList.add('show'), 1200);
+}
+
+function hideInstallUI() {
+  document.getElementById('installAppBtn').style.display = 'none';
+  document.getElementById('installBanner')?.classList.remove('show');
+}
+
+async function triggerInstall() {
+  if (!deferredPrompt) return;
+  hideInstallUI();
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  console.log('[PWA] Install outcome:', outcome);
+  deferredPrompt = null;
+  if (outcome === 'accepted') {
+    showToast('Installing AMP KART… ✓');
+  } else {
+    localStorage.setItem(DISMISS_KEY, Date.now().toString());
+  }
+}
+
+/* The key event — Chrome fires this when install criteria are met */
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  console.log('[PWA] beforeinstallprompt captured ✓');
+  showInstallUI();
+});
+
+/* Header button */
+document.getElementById('installAppBtn').addEventListener('click', triggerInstall);
+
+/* Bottom banner install button */
+document.getElementById('bannerInstallBtn')?.addEventListener('click', triggerInstall);
+
+/* Bottom banner dismiss */
+document.getElementById('bannerDismissBtn')?.addEventListener('click', () => {
+  hideInstallUI();
+  localStorage.setItem(DISMISS_KEY, Date.now().toString());
+});
+
+/* App installed callback */
+window.addEventListener('appinstalled', () => {
+  hideInstallUI();
+  deferredPrompt = null;
+  showToast('AMP KART installed! ✓');
+  console.log('[PWA] App installed ✓');
+});
+
+/* Standalone mode — hide all install prompts */
+if (isStandalone()) hideInstallUI();
+
 
 </script>
 </body>
 </html>
-
-
-```
