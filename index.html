@@ -1,9 +1,14 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AMP KART — Tool OS</title>
+  
+  <!-- PWA Manifest Link -->
+  <link rel="manifest" href="manifest.json" />
+
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
@@ -63,6 +68,20 @@
       color: var(--y); padding: 3px 9px;
       border-radius: 20px; letter-spacing: .3px;
     }
+    
+    /* PWA Install Button */
+    .install-btn {
+      font-size: 10px; font-weight: 700;
+      background: rgba(255,214,0,.15);
+      border: 1px solid rgba(255,214,0,.4);
+      color: var(--y); padding: 5px 10px;
+      border-radius: var(--rsm); letter-spacing: .3px;
+      transition: var(--ease); text-transform: uppercase;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .install-btn:hover { background: var(--y); color: var(--blk); }
+    .install-btn svg { width: 12px; height: 12px; }
+
     .settings-btn {
       width: 32px; height: 32px;
       background: rgba(255,255,255,.07);
@@ -323,7 +342,7 @@
 <header class="hdr">
   <div class="hdr-left">
     <div class="logo">
-      <img src="photo/logo.png" alt="" onerror="this.parentElement.textContent='AK'" />
+      <img src="https://ik.imagekit.io/nsyr92pse/1000201093-optimized.jpg" alt="" onerror="this.parentElement.textContent='AK'" />
     </div>
     <div>
       <div class="brand">AMP KART</div>
@@ -331,6 +350,11 @@
     </div>
   </div>
   <div class="hdr-right">
+    <!-- PWA Install Button -->
+    <button id="installAppBtn" class="install-btn" style="display: none;" title="Install App">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      App
+    </button>
     <span class="badge-int">● Internal</span>
     <button class="settings-btn" onclick="openSettings()" title="Settings">⚙️</button>
   </div>
@@ -625,26 +649,59 @@ function showToast(msg) {
   toastT = setTimeout(() => el.classList.remove('show'), 2500);
 }
 
+/* ── PWA INSTALL LOGIC ──────────────────────────────── */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(err => {
+      console.log('Service Worker registration failed: ', err);
+    });
+  });
+}
+
+let deferredPrompt;
+const installBtn = document.getElementById('installAppBtn');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  // Prevent the mini-infobar from appearing on mobile
+  e.preventDefault();
+  // Stash the event so it can be triggered later.
+  deferredPrompt = e;
+  // Update UI notify the user they can install the PWA
+  installBtn.style.display = 'flex';
+});
+
+installBtn.addEventListener('click', async () => {
+  if (deferredPrompt) {
+    // Show the install prompt
+    deferredPrompt.prompt();
+    // Wait for the user to respond to the prompt
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      console.log('User accepted the install prompt');
+    } else {
+      console.log('User dismissed the install prompt');
+    }
+    // We've used the prompt, and can't use it again, throw it away
+    deferredPrompt = null;
+    // Hide the button
+    installBtn.style.display = 'none';
+  }
+});
+
+window.addEventListener('appinstalled', () => {
+  // Hide the app-provided install promotion
+  installBtn.style.display = 'none';
+  // Clear the deferredPrompt so it can be garbage collected
+  deferredPrompt = null;
+  // Optionally, send analytics event to indicate successful install
+  showToast('App installed successfully! ✓');
+});
+
 /* ── INIT ───────────────────────────────────────────── */
 renderGrid();
 
-/*
-══════════════════════════════════════════════════
-FIREBASE READY STRUCTURE
-══════════════════════════════════════════════════
-import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
-
-const db = getFirestore(initializeApp(firebaseConfig));
-
-async function loadToolsFromFirebase() {
-  const snap = await getDocs(collection(db, 'tools'));
-  tools = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  renderGrid();
-}
-loadToolsFromFirebase();
-══════════════════════════════════════════════════
-*/
 </script>
 </body>
 </html>
+
+```
