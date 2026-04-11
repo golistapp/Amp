@@ -1,902 +1,513 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AMP KART — Tool OS</title>
-  
-  <!-- SOCIAL MEDIA META TAGS (WhatsApp, Facebook, Link sharing preview) -->
-  <meta name="title" content="AMP KART — Tool OS" />
-  <meta name="description" content="AMP KART Control Panel - All your business tools in one place. Pricing Calculator, Image Compressor, QR Generator & more." />
-  <meta name="theme-color" content="#000000" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AMP KART — Pricing Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://golistapp.store/" />
-  <meta property="og:title" content="AMP KART — Tool OS" />
-  <meta property="og:description" content="AMP KART Control Panel - All your business tools in one place." />
-  <meta property="og:image" content="https://ik.imagekit.io/nsyr92pse/1000201093-optimized.jpg" />
+:root {
+  --yellow:      #FFD600;
+  --yellow-dark: #E6C000;
+  --yellow-glow: rgba(255,214,0,0.22);
+  --black:       #000000;
+  --white:       #FFFFFF;
+  --blue:        #1E3A8A;
+  --blue-soft:   #EFF6FF;
+  --bg:          #F2F3F7;
+  --card:        #FFFFFF;
+  --border:      #E4E6EB;
+  --text:        #111111;
+  --muted:       #6B7280;
+  --green:       #16A34A;
+  --green-bg:    #DCFCE7;
+  --red:         #DC2626;
+  --warn:        #D97706;
+  --shadow:      0 2px 14px rgba(0,0,0,0.07);
+  --shadow-lg:   0 10px 36px rgba(0,0,0,0.14);
+  --radius:      16px;
+  --radius-sm:   10px;
+  --radius-xs:   8px;
+}
 
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:url" content="https://golistapp.store/" />
-  <meta name="twitter:title" content="AMP KART — Tool OS" />
-  <meta name="twitter:description" content="AMP KART Control Panel - All your business tools in one place." />
-  <meta name="twitter:image" content="https://ik.imagekit.io/nsyr92pse/1000201093-optimized.jpg" />
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 56px; }
 
-  <!-- PWA Manifest Link -->
-  <link rel="manifest" href="/manifest.json" />
+/* HEADER */
+.header { background: var(--black); padding: 0 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 20px rgba(0,0,0,0.45); }
+.header-inner { max-width: 480px; margin: 0 auto; display: flex; align-items: center; gap: 12px; height: 64px; }
+.logo-box { width: 42px; height: 42px; background: var(--yellow); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--black); letter-spacing: 0.5px; }
+.header-title { display: flex; flex-direction: column; }
+.header-title .brand { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--yellow); letter-spacing: 2px; line-height: 1; }
+.header-title .sub { font-size: 10px; color: rgba(255,255,255,0.42); font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; }
+.header-badge { margin-left: auto; background: var(--blue); color: var(--white); font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 20px; letter-spacing: 0.5px; text-transform: uppercase; }
 
-  <!-- PWA iOS / Safari Support -->
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="AMP KART" />
-  <link rel="apple-touch-icon" href="https://ik.imagekit.io/nsyr92pse/1000201093-optimized.jpg" />
+/* MAIN */
+.main { max-width: 480px; margin: 0 auto; padding: 20px 16px; display: flex; flex-direction: column; gap: 14px; }
 
-  <!-- PWA Chrome / Android -->
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="application-name" content="AMP KART" />
+/* CARD */
+.card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+.card-header { display: flex; align-items: center; gap: 10px; padding: 15px 18px 0; }
+.card-icon { width: 32px; height: 32px; background: var(--black); border-radius: var(--radius-xs); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.card-label { font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+.card-body { padding: 14px 18px 20px; }
 
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --y:    #FFD600;
-      --yd:   #C9AC00;
-      --yg:   rgba(255,214,0,.10);
-      --blk:  #000000;
-      --wht:  #FFFFFF;
-      --blu:  #1E3A8A;
-      --bg:   #EBEBEE;
-      --card: #FFFFFF;
-      --bdr:  #DDDFE8;
-      --txt:  #0D0F14;
-      --sub:  #6B7280;
-      --r:    14px;
-      --rsm:  8px;
-      --f:    'Poppins', sans-serif;
-      --ease: .18s cubic-bezier(.4,0,.2,1);
-      --hh:   54px;
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: var(--f);
-      background: var(--bg);
-      color: var(--txt);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-    a { text-decoration: none; color: inherit; }
-    button { font-family: var(--f); cursor: pointer; border: none; background: none; outline: none; }
+/* INPUT */
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; }
+.input-wrap { position: relative; }
+.rupee { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 18px; font-weight: 700; color: var(--black); pointer-events: none; z-index: 1; }
+input[type="number"] { width: 100%; padding: 16px 14px 16px 34px; border: 2px solid var(--border); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 24px; font-weight: 700; color: var(--text); background: var(--bg); outline: none; transition: border-color 0.2s, box-shadow 0.2s, background 0.2s; -moz-appearance: textfield; }
+input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+input[type="number"]:focus { border-color: var(--yellow); background: var(--white); box-shadow: 0 0 0 4px var(--yellow-glow); }
+input[type="number"].error { border-color: var(--red); box-shadow: 0 0 0 4px rgba(220,38,38,0.10); }
+.hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.error-msg { font-size: 11px; color: var(--red); font-weight: 600; display: none; margin-top: 4px; }
+.error-msg.show { display: block; }
 
-    /* ── HEADER ─────────────────────────────────────── */
-    .hdr {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 300;
-      height: var(--hh);
-      background: var(--blk);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 18px;
-      border-bottom: 2px solid var(--y);
-    }
-    .hdr-left { display: flex; align-items: center; gap: 10px; }
-    .logo {
-      width: 32px; height: 32px; border-radius: var(--rsm);
-      background: var(--y);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 12px; font-weight: 800; color: var(--blk);
-      overflow: hidden; flex-shrink: 0;
-    }
-    .logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .brand { font-size: 16px; font-weight: 800; color: var(--y); letter-spacing: 1.5px; }
-    .brand-sub { font-size: 8px; color: rgba(255,255,255,.32); letter-spacing: .4px; text-transform: uppercase; }
-    .hdr-right { display: flex; align-items: center; gap: 10px; }
-    .badge-int {
-      font-size: 9px; font-weight: 600;
-      background: rgba(255,214,0,.1);
-      border: 1px solid rgba(255,214,0,.28);
-      color: var(--y); padding: 3px 9px;
-      border-radius: 20px; letter-spacing: .3px;
-    }
-    
-    /* PWA Install Button */
-    .install-btn {
-      font-size: 10px; font-weight: 700;
-      background: rgba(255,214,0,.15);
-      border: 1px solid rgba(255,214,0,.4);
-      color: var(--y); padding: 5px 10px;
-      border-radius: var(--rsm); letter-spacing: .3px;
-      transition: var(--ease); text-transform: uppercase;
-      display: flex; align-items: center; gap: 4px;
-    }
-    .install-btn:hover { background: var(--y); color: var(--blk); }
-    .install-btn svg { width: 12px; height: 12px; }
+/* MULTIPLIER CHIP */
+.multiplier-chip { display: inline-flex; align-items: center; gap: 6px; background: var(--black); color: var(--yellow); font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 20px; margin-top: 10px; letter-spacing: 0.5px; opacity: 0; transition: opacity 0.3s; }
+.multiplier-chip.show { opacity: 1; }
 
-    .settings-btn {
-      width: 32px; height: 32px;
-      background: rgba(255,255,255,.07);
-      border-radius: var(--rsm);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 15px;
-      transition: var(--ease);
-      border: 1px solid rgba(255,255,255,.1);
-    }
-    .settings-btn:hover { background: rgba(255,214,0,.15); border-color: rgba(255,214,0,.35); }
+/* BUTTON */
+.btn-calc { width: 100%; padding: 16px; border: none; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; background: var(--yellow); color: var(--black); letter-spacing: 0.4px; transition: all 0.18s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.btn-calc:hover { background: var(--yellow-dark); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,214,0,0.38); }
+.btn-calc:active { transform: translateY(0); box-shadow: none; }
+@keyframes btnpulse { 0%{transform:scale(1)} 50%{transform:scale(0.97)} 100%{transform:scale(1)} }
+.btn-calc.pulse { animation: btnpulse 0.26s ease; }
 
-    /* ── PAGE ───────────────────────────────────────── */
-    .page {
-      padding-top: calc(var(--hh) + 20px);
-      padding-bottom: 50px;
-    }
-    .wrap { max-width: 900px; margin: 0 auto; padding: 0 16px; }
+/* EMPTY STATE */
+.empty-state { text-align: center; padding: 40px 20px; color: var(--muted); }
+.empty-state .e-icon { font-size: 42px; margin-bottom: 12px; }
+.empty-state p { font-size: 14px; font-weight: 500; }
+.empty-state small { font-size: 12px; opacity: 0.55; }
 
-    /* ── HERO STRIP ─────────────────────────────────── */
-    .hero-strip {
-      background: var(--blk);
-      border-radius: var(--r);
-      padding: 16px 20px;
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 18px;
-      border: 1.5px solid rgba(255,214,0,.15);
-      animation: fu .4s ease both;
-    }
-    .hero-left {}
-    .hero-title {
-      font-size: clamp(22px,4vw,30px);
-      font-weight: 800; color: var(--wht);
-      letter-spacing: -.2px; line-height: 1;
-    }
-    .hero-title em { color: var(--y); font-style: normal; }
-    .hero-sub { font-size: 11px; color: rgba(255,255,255,.38); margin-top: 3px; font-weight: 400; }
-    .hero-right { display: flex; gap: 10px; flex-shrink: 0; }
-    .metric {
-      text-align: right;
-    }
-    .metric-val { font-size: 20px; font-weight: 700; color: var(--y); line-height: 1; }
-    .metric-val.w { color: var(--wht); }
-    .metric-lbl { font-size: 9px; color: rgba(255,255,255,.3); text-transform: uppercase; letter-spacing: .3px; }
+/* RESULT SECTION */
+.result-section { display: none; flex-direction: column; gap: 14px; }
+.result-section.show { display: flex; }
 
-    /* ── TOOL GRID ──────────────────────────────────── */
-    .grid-wrap { animation: fu .4s .08s ease both; }
-    .tool-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-    }
-    @media(max-width: 580px) { .tool-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
-    @media(max-width: 340px) { .tool-grid { grid-template-columns: 1fr; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* ── TOOL CARD ──────────────────────────────────── */
-    .tc {
-      background: var(--card);
-      border: 1.5px solid var(--bdr);
-      border-radius: var(--r);
-      padding: 16px 14px 14px;
-      display: flex; flex-direction: column; gap: 11px;
-      position: relative; overflow: hidden;
-      transition: transform var(--ease), box-shadow var(--ease), border-color var(--ease);
-      cursor: pointer;
-      user-select: none;
-    }
-    .tc::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0;
-      height: 2px; background: var(--y);
-      transform: scaleX(0); transform-origin: left;
-      transition: transform var(--ease);
-    }
-    .tc.acc-blue::before { background: var(--blu); }
-    .tc:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.1); border-color: rgba(255,214,0,.35); }
-    .tc:hover::before { transform: scaleX(1); }
-    .tc.disabled { opacity: .42; pointer-events: none; }
-    .tc.hidden-tool { display: none; }
+/* ── HERO — RECOMMENDED ── */
+.rec-hero { background: var(--black); border-radius: var(--radius); padding: 22px 20px 20px; box-shadow: var(--shadow-lg); position: relative; overflow: hidden; animation: slideUp 0.32s ease both; }
+.rec-hero::before { content: ''; position: absolute; top: -40px; right: -40px; width: 160px; height: 160px; background: radial-gradient(circle, rgba(255,214,0,0.18) 0%, transparent 70%); pointer-events: none; }
+.rec-tag { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.38); margin-bottom: 4px; }
+.rec-price { font-family: 'Bebas Neue', sans-serif; font-size: 72px; color: var(--yellow); line-height: 1; letter-spacing: 1px; }
+.rec-meta { display: flex; align-items: center; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.meta-chip { display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 5px 12px; font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.75); }
+.meta-chip.profit { color: #4ADE80; border-color: rgba(74,222,128,0.25); background: rgba(74,222,128,0.08); }
+.rec-risk-pill { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+.rec-risk-pill.safe { background: rgba(22,163,74,0.18); color: #4ADE80; }
+.rec-risk-pill.warn { background: rgba(217,119,6,0.18); color: #FCD34D; }
+.rec-risk-pill.risk { background: rgba(220,38,38,0.18); color: #F87171; }
 
-    /* drag states */
-    .tc.dragging { opacity: .35; transform: scale(.97); }
-    .tc.drag-over { border-color: var(--y); box-shadow: 0 0 0 2px rgba(255,214,0,.3); }
+/* ── SECONDARY CARDS ── */
+.secondary-prices { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.sec-card { border-radius: var(--radius); padding: 18px 16px; box-shadow: var(--shadow); animation: slideUp 0.36s ease both; }
+.sec-card.low-card { background: #1C1C1E; }
+.sec-card.high-card { background: var(--blue); }
+.sec-tag { font-size: 9px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; margin-bottom: 8px; }
+.low-card .sec-tag { color: rgba(255,255,255,0.40); }
+.high-card .sec-tag { color: rgba(255,255,255,0.45); }
+.sec-price { font-family: 'Bebas Neue', sans-serif; font-size: 38px; line-height: 1; letter-spacing: 0.5px; margin-bottom: 10px; }
+.low-card .sec-price { color: #FFFFFF; }
+.high-card .sec-price { color: var(--yellow); }
+.sec-meta { display: flex; flex-direction: column; gap: 4px; }
+.sec-meta-row { display: flex; align-items: center; justify-content: space-between; font-size: 11px; font-weight: 600; }
+.low-card .sec-meta-row .sl { color: rgba(255,255,255,0.38); }
+.low-card .sec-meta-row .sv { color: rgba(255,255,255,0.80); }
+.high-card .sec-meta-row .sl { color: rgba(255,255,255,0.40); }
+.high-card .sec-meta-row .sv { color: rgba(255,255,255,0.85); }
 
-    .tc-top { display: flex; align-items: center; justify-content: space-between; }
-    .tc-icon {
-      width: 38px; height: 38px; border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; flex-shrink: 0;
-    }
-    .iy { background: rgba(255,214,0,.13); }
-    .ib { background: rgba(30,58,138,.09); }
-    .ig { background: rgba(16,185,129,.09); }
-    .io { background: rgba(249,115,22,.09); }
-    .ip { background: rgba(139,92,246,.09); }
-    .ir { background: rgba(239,68,68,.09); }
+/* ── BREAKDOWN CARD ── */
+.breakdown-card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; animation: slideUp 0.40s ease both; }
+.bk-header { background: var(--blue); padding: 13px 18px; display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; }
+.bk-header-icon { font-size: 16px; }
+.bk-header-title { font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.85); flex: 1; }
+.bk-arrow { font-size: 14px; color: rgba(255,255,255,0.6); transition: transform 0.22s; }
+.bk-arrow.closed { transform: rotate(-90deg); }
+.bk-body { overflow: hidden; max-height: 600px; transition: max-height 0.32s ease; }
+.bk-body.collapsed { max-height: 0; }
+.bk-inner { padding: 14px 18px 18px; display: flex; flex-direction: column; gap: 0; }
+.bk-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.bk-row:last-child { border-bottom: none; }
+.bk-row.total { padding-top: 12px; }
+.bk-left { display: flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 500; color: var(--text); }
+.bk-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.bk-right { display: flex; align-items: center; gap: 8px; }
+.bk-pct { font-size: 11px; font-weight: 600; color: var(--muted); background: var(--bg); padding: 2px 7px; border-radius: 10px; }
+.bk-val { font-size: 14px; font-weight: 700; color: var(--text); min-width: 60px; text-align: right; }
+.bk-row.total .bk-left { font-weight: 700; font-size: 13px; }
+.bk-row.total .bk-val { color: var(--blue); font-size: 15px; }
+.bk-profit-row { margin-top: 12px; background: var(--green-bg); border-radius: var(--radius-xs); padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; }
+.bk-profit-label { font-size: 13px; font-weight: 700; color: var(--green); display: flex; align-items: center; gap: 6px; }
+.bk-profit-val { font-size: 18px; font-weight: 700; color: var(--green); }
 
-    .tc-name { font-size: 13px; font-weight: 700; color: var(--txt); line-height: 1.2; }
-
-    .tc-foot { display: flex; align-items: center; justify-content: space-between; }
-    .badge { font-size: 9px; font-weight: 600; padding: 2px 7px; border-radius: 20px; letter-spacing: .2px; }
-    .bl { background: rgba(16,185,129,.11); color: #059669; }
-    .bb { background: rgba(30,58,138,.11); color: var(--blu); }
-    .bs { background: rgba(249,115,22,.09); color: #c2640a; }
-
-    .open-btn {
-      font-size: 10px; font-weight: 700;
-      background: var(--blk); color: var(--y);
-      padding: 5px 12px; border-radius: 6px;
-      letter-spacing: .3px; transition: var(--ease);
-      text-transform: uppercase;
-    }
-    .open-btn:hover { background: var(--y); color: var(--blk); }
-
-    /* card stagger */
-    .tc:nth-child(1){animation:fu .35s .10s ease both}
-    .tc:nth-child(2){animation:fu .35s .14s ease both}
-    .tc:nth-child(3){animation:fu .35s .18s ease both}
-    .tc:nth-child(4){animation:fu .35s .22s ease both}
-    .tc:nth-child(5){animation:fu .35s .26s ease both}
-    .tc:nth-child(6){animation:fu .35s .30s ease both}
-    .tc:nth-child(7){animation:fu .35s .34s ease both}
-    .tc:nth-child(8){animation:fu .35s .38s ease both}
-
-    /* ── SETTINGS PANEL ─────────────────────────────── */
-    .overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,.5);
-      z-index: 400; opacity: 0; pointer-events: none;
-      transition: opacity .25s;
-    }
-    .overlay.open { opacity: 1; pointer-events: all; }
-
-    .settings-panel {
-      position: fixed; top: 0; right: 0; bottom: 0;
-      width: min(360px, 95vw);
-      background: var(--wht);
-      z-index: 500;
-      transform: translateX(100%);
-      transition: transform .3s cubic-bezier(.4,0,.2,1);
-      display: flex; flex-direction: column;
-      box-shadow: -8px 0 32px rgba(0,0,0,.15);
-    }
-    .settings-panel.open { transform: translateX(0); }
-
-    .sp-head {
-      background: var(--blk);
-      padding: 16px 18px;
-      display: flex; align-items: center; justify-content: space-between;
-      border-bottom: 2px solid var(--y);
-      flex-shrink: 0;
-    }
-    .sp-title { font-size: 15px; font-weight: 700; color: var(--y); letter-spacing: .5px; }
-    .sp-close {
-      width: 30px; height: 30px;
-      background: rgba(255,255,255,.08);
-      border-radius: 6px;
-      display: flex; align-items: center; justify-content: center;
-      color: rgba(255,255,255,.6); font-size: 16px;
-      transition: var(--ease);
-    }
-    .sp-close:hover { background: rgba(255,214,0,.2); color: var(--y); }
-
-    .sp-body { flex: 1; overflow-y: auto; padding: 14px 16px; }
-    .sp-section-title {
-      font-size: 10px; font-weight: 700;
-      color: var(--sub); text-transform: uppercase;
-      letter-spacing: .8px; margin-bottom: 10px;
-    }
-
-    /* settings list items */
-    .sp-item {
-      background: #F7F8FA;
-      border: 1.5px solid var(--bdr);
-      border-radius: 10px;
-      padding: 10px 12px;
-      display: flex; align-items: center; gap: 10px;
-      margin-bottom: 8px;
-      cursor: grab;
-      transition: var(--ease);
-    }
-    .sp-item:active { cursor: grabbing; }
-    .sp-item.dragging-sp { opacity: .3; }
-    .sp-item.drag-over-sp { border-color: var(--y); background: var(--yg); }
-
-    .sp-drag { color: #ccc; font-size: 14px; flex-shrink: 0; cursor: grab; }
-    .sp-icon { font-size: 16px; flex-shrink: 0; }
-    .sp-name { font-size: 12px; font-weight: 600; color: var(--txt); flex: 1; }
-    .sp-status { font-size: 9px; font-weight: 600; color: var(--sub); }
-
-    /* toggle switch */
-    .toggle {
-      position: relative; width: 36px; height: 20px; flex-shrink: 0;
-    }
-    .toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
-    .toggle-track {
-      position: absolute; inset: 0;
-      background: #D1D5DB; border-radius: 20px;
-      transition: var(--ease); cursor: pointer;
-    }
-    .toggle-track::after {
-      content: '';
-      position: absolute; top: 3px; left: 3px;
-      width: 14px; height: 14px;
-      background: var(--wht); border-radius: 50%;
-      transition: var(--ease);
-      box-shadow: 0 1px 3px rgba(0,0,0,.2);
-    }
-    .toggle input:checked + .toggle-track { background: var(--blk); }
-    .toggle input:checked + .toggle-track::after { transform: translateX(16px); }
-
-    .sp-foot {
-      padding: 14px 16px;
-      border-top: 1px solid var(--bdr);
-      flex-shrink: 0;
-    }
-    .sp-save {
-      width: 100%;
-      background: var(--blk); color: var(--y);
-      font-size: 13px; font-weight: 700;
-      padding: 12px; border-radius: 10px;
-      letter-spacing: .5px; transition: var(--ease);
-      text-transform: uppercase;
-    }
-    .sp-save:hover { background: var(--y); color: var(--blk); }
-
-    /* ── FOOTER ─────────────────────────────────────── */
-    .footer {
-      text-align: center; margin-top: 32px;
-      font-size: 10px; color: #bbb;
-      border-top: 1px solid var(--bdr);
-      padding-top: 16px;
-    }
-
-    /* ── TOAST ──────────────────────────────────────── */
-    .toast {
-      position: fixed; bottom: 20px; left: 50%;
-      transform: translateX(-50%) translateY(60px);
-      background: var(--blk); color: var(--y);
-      font-size: 12px; font-weight: 600;
-      padding: 9px 20px; border-radius: 30px;
-      border: 1.5px solid rgba(255,214,0,.35);
-      z-index: 999; pointer-events: none; white-space: nowrap;
-      transition: transform .28s cubic-bezier(.4,0,.2,1);
-    }
-    .toast.show { transform: translateX(-50%) translateY(0); }
-
-    /* ── PWA INSTALL BOTTOM BANNER ─────────────────────── */
-    .install-banner {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      z-index: 998;
-      background: var(--blk);
-      border-top: 2px solid var(--y);
-      padding: 14px 18px;
-      display: flex; align-items: center; gap: 12px;
-      transform: translateY(100%);
-      transition: transform .35s cubic-bezier(.4,0,.2,1);
-      box-shadow: 0 -8px 32px rgba(0,0,0,.3);
-    }
-    .install-banner.show { transform: translateY(0); }
-    .install-banner-icon {
-      width: 42px; height: 42px; border-radius: 10px;
-      background: var(--y); flex-shrink: 0; overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 800; font-size: 13px; color: var(--blk);
-    }
-    .install-banner-icon img { width: 100%; height: 100%; object-fit: cover; }
-    .install-banner-text { flex: 1; min-width: 0; }
-    .install-banner-title { font-size: 13px; font-weight: 700; color: var(--wht); line-height: 1.2; }
-    .install-banner-sub { font-size: 10px; color: rgba(255,255,255,.45); margin-top: 2px; }
-    .install-banner-actions { display: flex; gap: 8px; flex-shrink: 0; align-items: center; }
-    .btn-install-now {
-      background: var(--y); color: var(--blk);
-      font-size: 12px; font-weight: 700;
-      padding: 8px 16px; border-radius: 8px;
-      border: none; cursor: pointer;
-      letter-spacing: .3px; text-transform: uppercase;
-      transition: var(--ease); white-space: nowrap;
-    }
-    .btn-install-now:hover { background: var(--yd); }
-    .btn-install-now:active { transform: scale(.97); }
-    .btn-dismiss {
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.15);
-      color: rgba(255,255,255,.5);
-      font-size: 18px; width: 32px; height: 32px;
-      border-radius: 8px; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: var(--ease); flex-shrink: 0;
-    }
-    .btn-dismiss:hover { background: rgba(255,255,255,.14); color: var(--wht); }
-
-    /* ── PWA UPDATE BANNER ───────────────────────────────── */
-    .update-banner {
-      position: fixed; top: calc(var(--hh) + 6px); left: 50%;
-      transform: translateX(-50%) translateY(-80px);
-      z-index: 998;
-      background: #1a1a1a;
-      border: 1.5px solid rgba(255,214,0,.4);
-      border-radius: 12px;
-      padding: 10px 16px;
-      display: flex; align-items: center; gap: 10px;
-      transition: transform .3s cubic-bezier(.4,0,.2,1);
-      white-space: nowrap;
-      box-shadow: 0 8px 24px rgba(0,0,0,.4);
-    }
-    .update-banner.show { transform: translateX(-50%) translateY(0); }
-    .update-banner-text { font-size: 12px; font-weight: 600; color: rgba(255,255,255,.8); }
-    .btn-update {
-      background: var(--y); color: var(--blk);
-      font-size: 11px; font-weight: 700;
-      padding: 5px 12px; border-radius: 6px;
-      border: none; cursor: pointer;
-      letter-spacing: .3px; transition: var(--ease);
-    }
-    .btn-update:hover { background: var(--yd); }
-
-    @media(max-width:400px) {
-      .install-banner { padding: 12px 14px; gap: 10px; }
-      .btn-install-now { padding: 7px 12px; font-size: 11px; }
-    }
-
-    /* ── ANIMATIONS ─────────────────────────────────── */
-    @keyframes fu {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-thumb { background: var(--bdr); border-radius: 4px; }
-  </style>
+/* ── ANALYSIS CARD ── */
+.analysis-card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; animation: slideUp 0.44s ease both; }
+.analysis-header { background: var(--black); padding: 13px 18px; display: flex; align-items: center; gap: 10px; }
+.analysis-icon { font-size: 16px; }
+.analysis-title { font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.85); }
+.analysis-body { padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 14px; }
+.mbar-wrap { display: flex; flex-direction: column; gap: 6px; }
+.mbar-top { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; color: var(--muted); }
+.mbar-top .cur { color: var(--blue); font-weight: 700; }
+.mbar { background: var(--bg); border-radius: 99px; height: 10px; overflow: hidden; }
+.mbar-fill { height: 100%; border-radius: 99px; background: var(--green); transition: width 0.5s cubic-bezier(0.34,1.56,0.64,1), background 0.4s; }
+.risk-badge { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: var(--radius-xs); border: 2px solid transparent; }
+.risk-badge.safe { background: var(--green-bg); border-color: rgba(22,163,74,0.2); }
+.risk-badge.warn { background: #FEF3C7; border-color: rgba(217,119,6,0.2); }
+.risk-badge.risk { background: #FEE2E2; border-color: rgba(220,38,38,0.2); }
+.r-emoji { font-size: 24px; line-height: 1; }
+.r-text { display: flex; flex-direction: column; gap: 2px; }
+.r-label { font-size: 14px; font-weight: 700; color: var(--text); }
+.r-desc { font-size: 12px; color: var(--muted); font-weight: 500; }
+</style>
 </head>
 <body>
 
-<!-- ── HEADER ─────────────────────────────────────────── -->
-<header class="hdr">
-  <div class="hdr-left">
-    <div class="logo">
-      <img src="https://ik.imagekit.io/nsyr92pse/1000201093-optimized.jpg" alt="" onerror="this.parentElement.textContent='AK'" />
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo-box">AK</div>
+    <div class="header-title">
+      <span class="brand">AMP KART</span>
+      <span class="sub">Pricing Calculator</span>
     </div>
-    <div>
-      <div class="brand">AMP KART</div>
-      <div class="brand-sub">Advanced Market Platform</div>
-    </div>
-  </div>
-
-  <div class="hdr-right">
-    <!-- PWA Install Button -->
-    <button id="installAppBtn" class="install-btn" style="display: none;" title="Install App">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      App
-    </button>
-    <span class="badge-int">● Internal</span>
-    <button class="settings-btn" onclick="openSettings()" title="Settings">⚙️</button>
+    <div class="header-badge">v2.0</div>
   </div>
 </header>
 
-<!-- ── PAGE ───────────────────────────────────────────── -->
-<main class="page">
-  <div class="wrap">
+<main class="main">
 
-    <!-- HERO STRIP -->
-    <div class="hero-strip">
-      <div class="hero-left">
-        <div class="hero-title">TOOL <em>OS</em></div>
-        <div class="hero-sub">AMP KART Control Panel · All tools in one place</div>
-      </div>
-      <div class="hero-right">
-        <div class="metric">
-          <div class="metric-val" id="m-live">3</div>
-          <div class="metric-lbl">Live</div>
+  <!-- INPUT CARD -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🏷️</div>
+      <span class="card-label">Product Cost (DP Price)</span>
+    </div>
+    <div class="card-body">
+      <div class="field">
+        <label for="dpInput">Enter your DP / cost price</label>
+        <div class="input-wrap">
+          <span class="rupee">₹</span>
+          <input type="number" id="dpInput" placeholder="0" min="1" max="10000" autocomplete="off" />
         </div>
-        <div class="metric">
-          <div class="metric-val w" id="m-total">8</div>
-          <div class="metric-lbl">Total</div>
+        <div class="error-msg" id="errorMsg">⚠ Please enter a valid product cost.</div>
+        <div class="hint">Range: ₹1 – ₹10,000</div>
+      </div>
+
+      <div id="multiplierChip" class="multiplier-chip">
+        <span>✕</span><span id="chipMult">—</span><span style="opacity:0.5;font-weight:400;">multiplier applied</span>
+      </div>
+
+      <div style="margin-top: 18px;">
+        <button class="btn-calc" id="calcBtn" onclick="calculate()">
+          <span>⚡</span> Calculate Price
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS AREA -->
+  <div id="emptyState" class="empty-state">
+    <div class="e-icon">🛒</div>
+    <p>Enter your product cost above</p>
+    <small>Recommended, Low & High prices will appear here</small>
+  </div>
+
+  <div class="result-section" id="resultSection">
+
+    <!-- HERO — RECOMMENDED -->
+    <div class="rec-hero">
+      <div class="rec-tag">✅ Recommended Price</div>
+      <div class="rec-price" id="rRecPrice">₹0</div>
+      <div class="rec-meta">
+        <div class="meta-chip profit">💰 Profit: <span id="rProfit">₹0</span></div>
+        <div id="riskPill" class="rec-risk-pill safe">—</div>
+      </div>
+    </div>
+
+    <!-- LOW + HIGH -->
+    <div class="secondary-prices">
+      <div class="sec-card low-card">
+        <div class="sec-tag">⬇ Low Price</div>
+        <div class="sec-price" id="rLowPrice">₹0</div>
+        <div class="sec-meta">
+          <div class="sec-meta-row">
+            <span class="sl">−5% off rec</span>
+            <span class="sv" id="rLowPct">—</span>
+          </div>
+        </div>
+      </div>
+      <div class="sec-card high-card">
+        <div class="sec-tag">⬆ High Price</div>
+        <div class="sec-price" id="rHighPrice">₹0</div>
+        <div class="sec-meta">
+          <div class="sec-meta-row">
+            <span class="sl">+10% on rec</span>
+            <span class="sv" id="rHighPct">—</span>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- TOOL GRID -->
-    <div class="grid-wrap">
-      <div class="tool-grid" id="toolGrid"></div>
+    <!-- BREAKDOWN -->
+    <div class="breakdown-card">
+      <div class="bk-header" onclick="toggleBreakdown()">
+        <span class="bk-header-icon">📊</span>
+        <span class="bk-header-title">Cost Breakdown</span>
+        <span class="bk-arrow open" id="bkArrow">▼</span>
+      </div>
+      <div class="bk-body" id="bkBody">
+        <div class="bk-inner">
+
+          <div class="bk-row">
+            <div class="bk-left"><div class="bk-dot" style="background:#6366F1;"></div>Product Cost</div>
+            <div class="bk-right"><span class="bk-pct">44%</span><span class="bk-val" id="bProduct">₹0</span></div>
+          </div>
+          <div class="bk-row">
+            <div class="bk-left"><div class="bk-dot" style="background:#0EA5E9;"></div>Delivery</div>
+            <div class="bk-right"><span class="bk-pct">18%</span><span class="bk-val" id="bDelivery">₹0</span></div>
+          </div>
+          <div class="bk-row">
+            <div class="bk-left"><div class="bk-dot" style="background:#F59E0B;"></div>Ads + Packaging + Payment</div>
+            <div class="bk-right"><span class="bk-pct">9%</span><span class="bk-val" id="bOther">₹0</span></div>
+          </div>
+          <div class="bk-row">
+            <div class="bk-left"><div class="bk-dot" style="background:#EF4444;"></div>RTO Buffer</div>
+            <div class="bk-right"><span class="bk-pct">8%</span><span class="bk-val" id="bRTO">₹0</span></div>
+          </div>
+          <div class="bk-row">
+            <div class="bk-left"><div class="bk-dot" style="background:#EC4899;"></div>Donation</div>
+            <div class="bk-right"><span class="bk-pct">1%</span><span class="bk-val" id="bDonation">₹0</span></div>
+          </div>
+          <div class="bk-row total">
+            <div class="bk-left">Total (excl. Profit)</div>
+            <div class="bk-right"><span class="bk-pct">80%</span><span class="bk-val" id="bTotal">₹0</span></div>
+          </div>
+
+          <div class="bk-profit-row">
+            <div class="bk-profit-label">🟢 Profit (20%)</div>
+            <div class="bk-profit-val" id="bProfit">₹0</div>
+          </div>
+
+        </div>
+      </div>
     </div>
 
-  </div><!-- /wrap -->
+    <!-- ANALYSIS -->
+    <div class="analysis-card">
+      <div class="analysis-header">
+        <div class="analysis-icon">⚠️</div>
+        <div class="analysis-title">Risk Level</div>
+      </div>
+      <div class="analysis-body">
+        <div class="mbar-wrap">
+          <div class="mbar-top">
+            <span>₹0</span>
+            <span class="cur" id="mbarLabel">—</span>
+            <span>₹120+</span>
+          </div>
+          <div class="mbar">
+            <div class="mbar-fill" id="mbarFill" style="width:0%;"></div>
+          </div>
+        </div>
+        <div class="risk-badge" id="riskBadge">
+          <div class="r-emoji" id="riskEmoji">🟡</div>
+          <div class="r-text">
+            <div class="r-label" id="riskLabel">—</div>
+            <div class="r-desc" id="riskDesc">Calculate to see risk level</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /result-section -->
+
 </main>
 
-<!-- ── FOOTER ──────────────────────────────────────────── -->
-<footer class="footer">
-  <strong style="color:var(--sub)">AMP KART INTERNAL SYSTEM</strong> &nbsp;·&nbsp; Tool OS v3.0 &nbsp;·&nbsp; © 2025
-</footer>
-
-<!-- ── SETTINGS OVERLAY + PANEL ───────────────────────── -->
-<div class="overlay" id="overlay" onclick="closeSettings()"></div>
-
-<aside class="settings-panel" id="settingsPanel">
-  <div class="sp-head">
-    <span class="sp-title">⚙ SETTINGS</span>
-    <button class="sp-close" onclick="closeSettings()">✕</button>
-  </div>
-  <div class="sp-body">
-    <div class="sp-section-title">Reorder & Manage Tools</div>
-    <div id="spList"></div>
-  </div>
-  <div class="sp-foot">
-    <button class="sp-save" onclick="saveSettings()">Save &amp; Apply</button>
-  </div>
-</aside>
-
-<!-- ── TOAST ───────────────────────────────────────────── -->
-<div class="toast" id="toast"></div>
-
-<!-- ── PWA BOTTOM INSTALL BANNER ──────────────────────── -->
-<div class="install-banner" id="installBanner" role="dialog" aria-label="Install AMP KART app">
-  <div class="install-banner-icon">
-    <img src="https://ik.imagekit.io/nsyr92pse/1000201093-optimized.jpg" alt="AMP KART" onerror="this.parentElement.textContent='AK'" />
-  </div>
-  <div class="install-banner-text">
-    <div class="install-banner-title">Install AMP KART</div>
-    <div class="install-banner-sub">Add to home screen for best experience</div>
-  </div>
-  <div class="install-banner-actions">
-    <button class="btn-install-now" id="bannerInstallBtn">Install</button>
-    <button class="btn-dismiss" id="bannerDismissBtn" aria-label="Dismiss">✕</button>
-  </div>
-</div>
-
-<!-- ── PWA UPDATE BANNER ───────────────────────────────── -->
-<div class="update-banner" id="updateBanner" role="alert">
-  <span class="update-banner-text">🔄 New version available!</span>
-  <button class="btn-update" id="updateBtn">Update</button>
-</div>
-
-<!-- ── SCRIPT ──────────────────────────────────────────── -->
 <script>
-/* ════════════════════════════════════════════════
-   TOOL CONFIG — update only links & details here
-   ════════════════════════════════════════════════ */
+/* ── HELPERS ── */
+const fmt = n => '₹' + Math.round(n).toLocaleString('en-IN');
 
-const TOOLS_DEFAULT = [
-  { 
-    id:'calculator', 
-    name:'Pricing Calculator', 
-    icon:`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255, 215, 0, 0.1)"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M8 18h.01M12 18h.01"/></g><g stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M8 18h.01M12 18h.01"/></g></svg>`, 
-    ic:'iy', url:'/calculator.html', status:'live', enabled:true 
-  },
-  { 
-    id:'compressor', 
-    name:'Image Compressor', 
-    icon:`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255, 215, 0, 0.1)"><path d="M8 3v3a2 2 0 0 1-2 2H3M21 8h-3a2 2 0 0 1-2-2V3M3 16h3a2 2 0 0 1 2 2v3M16 21v-3a2 2 0 0 1 2-2h3"/><rect x="8" y="8" width="8" height="8" rx="1"/></g><g stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M8 3v3a2 2 0 0 1-2 2H3M21 8h-3a2 2 0 0 1-2-2V3M3 16h3a2 2 0 0 1 2 2v3M16 21v-3a2 2 0 0 1 2-2h3"/><rect x="8" y="8" width="8" height="8" rx="1"/></g></svg>`, 
-    ic:'ib', url:'/compressor.html', status:'live', enabled:true 
-  },
-  { 
-    id:'qr', 
-    name:'QR Generator', 
-    icon:`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255, 215, 0, 0.1)"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h.01M18 14h.01M14 18h.01M18 18h.01"/></g><g stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h.01M18 14h.01M14 18h.01M18 18h.01"/></g></svg>`, 
-    ic:'ig', url:'/qr.html', status:'live', enabled:true 
-  },
-  { 
-    id:'profit', 
-    name:'Profit Analyzer', 
-    icon:`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255, 215, 0, 0.1)"><rect x="10" y="10" width="4" height="10" rx="1"/><rect x="17" y="4" width="4" height="16" rx="1"/><rect x="3" y="16" width="4" height="4" rx="1"/></g><g stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><rect x="10" y="10" width="4" height="10" rx="1"/><rect x="17" y="4" width="4" height="16" rx="1"/><rect x="3" y="16" width="4" height="4" rx="1"/></g></svg>`, 
-    ic:'io', url:'/profit.html', status:'beta', enabled:true 
-  },
-  { 
-    id:'orders', 
-    name:'Order Tracker', 
-    icon:`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255, 215, 0, 0.1)"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></g><g stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></g></svg>`, 
-    ic:'ib', url:'/orders.html', status:'soon', enabled:true 
-  },
-  { 
-    id:'products', 
-    name:'Product Manager', 
-    icon:`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255, 215, 0, 0.1)"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></g><g stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></g></svg>`, 
-    ic:'ip', url:'/products.html', status:'soon', enabled:true 
-  },
-  { 
-    id:'invoice', 
-    name:'Invoice Builder', 
-    icon:`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255, 215, 0, 0.1)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><path d="M10 9H8"/></g><g stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><path d="M10 9H8"/></g></svg>`, 
-    ic:'ig', url:'/invoice.html', status:'soon', enabled:true 
-  },
-  { 
-    id:'reports', 
-    name:'Sales Reports', 
-    icon:`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255, 215, 0, 0.1)"><polyline points="2 12 6 12 9 3 15 21 18 12 22 12"/></g><g stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><polyline points="2 12 6 12 9 3 15 21 18 12 22 12"/></g></svg>`, 
-    ic:'ir', url:'/reports.html', status:'soon', enabled:true 
+/* ── MULTIPLIER TABLE ── */
+function getMultiplier(dp) {
+  if (dp <= 50)   return 3.5;
+  if (dp <= 100)  return 3.0;
+  if (dp <= 200)  return 2.6;
+  if (dp <= 300)  return 2.3;
+  if (dp <= 500)  return 2.0;
+  if (dp <= 700)  return 1.6;
+  if (dp <= 1000) return 1.55;
+  if (dp <= 1500) return 1.5;
+  if (dp <= 2000) return 1.4;
+  if (dp <= 3000) return 1.25;
+  if (dp <= 5000) return 1.2;
+  if (dp <= 7000) return 1.15;
+  return 1.1;
+}
+
+/* ── PSYCHOLOGICAL ROUNDING ── */
+function psychRound(price) {
+  // Target endings: 9, 49, 99, 149, 199, 249, 299, 349, 399, 449, 499...
+  const anchors = [9, 19, 29, 39, 49, 59, 69, 79, 89, 99, 119, 129, 149, 169, 179, 199,
+                   219, 229, 249, 269, 279, 299, 329, 349, 369, 399, 429, 449, 469, 499,
+                   529, 549, 569, 599, 629, 649, 699, 749, 799, 849, 899, 949, 999,
+                   1049, 1099, 1149, 1199, 1249, 1299, 1349, 1399, 1449, 1499,
+                   1549, 1599, 1649, 1699, 1749, 1799, 1849, 1899, 1949, 1999,
+                   2099, 2199, 2299, 2399, 2499, 2599, 2699, 2799, 2899, 2999,
+                   3199, 3299, 3499, 3699, 3899, 3999, 4199, 4499, 4699, 4999,
+                   5499, 5999, 6499, 6999, 7499, 7999, 8499, 8999, 9499, 9999,
+                   10999, 11999, 12999, 13999, 14999];
+
+  // Find closest anchor >= price (round up approach for psychology)
+  // or within 15% below — whichever feels closer
+  let best = anchors[anchors.length - 1];
+  let bestDiff = Infinity;
+
+  for (const a of anchors) {
+    const diff = Math.abs(a - price);
+    if (diff < bestDiff) { bestDiff = diff; best = a; }
   }
-];
-
-const STORE_KEY = 'ampkart_tools_v3';
-
-/* ── LOAD / SAVE CONFIG ─────────────────────────────── */
-function loadConfig() {
-  try {
-    const raw = localStorage.getItem(STORE_KEY);
-    if (!raw) return TOOLS_DEFAULT.map(t => ({...t}));
-    const saved = JSON.parse(raw);
-    return saved.map(s => {
-      const def = TOOLS_DEFAULT.find(d => d.id === s.id);
-      return def ? { ...def, enabled: s.enabled } : null;
-    }).filter(Boolean);
-  } catch { return TOOLS_DEFAULT.map(t => ({...t})); }
+  return best;
 }
 
-function saveConfig(tools) {
-  localStorage.setItem(STORE_KEY, JSON.stringify(
-    tools.map(t => ({ id: t.id, enabled: t.enabled }))
-  ));
-}
-
-let tools = loadConfig();
-
-/* ── STATUS HELPERS ─────────────────────────────────── */
-const badgeMap = {
-  live: '<span class="badge bl">● Live</span>',
-  beta: '<span class="badge bb">⬡ Beta</span>',
-  soon: '<span class="badge bs">◌ Soon</span>',
-};
-function accentClass(t) { return t.status === 'beta' || t.id === 'compressor' || t.id === 'orders' ? 'acc-blue' : ''; }
-
-/* ── RENDER TOOL GRID ───────────────────────────────── */
-function renderGrid() {
-  const grid = document.getElementById('toolGrid');
-  grid.innerHTML = '';
-  tools.forEach((t, i) => {
-    if (!t.enabled) return;
-    const div = document.createElement('div');
-    div.className = `tc ${accentClass(t)}`;
-    div.dataset.id = t.id;
-    div.dataset.idx = i;
-    div.innerHTML = `
-      <div class="tc-top">
-        <div class="tc-icon ${t.ic}">${t.icon}</div>
-        ${badgeMap[t.status]}
-      </div>
-      <span class="tc-name">${t.name}</span>
-      <div class="tc-foot">
-        <button class="open-btn" data-url="${t.url}" data-name="${t.name}" data-status="${t.status}">Open</button>
-      </div>`;
-    grid.appendChild(div);
-  });
-
-  grid.querySelectorAll('.open-btn').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      const { url, name, status } = btn.dataset;
-      if (status === 'soon') { showToast(`${name} — Coming Soon!`); return; }
-      window.location.href = url;
-    });
-  });
-
-  grid.querySelectorAll('.tc').forEach(card => {
-    card.addEventListener('click', () => {
-      const btn = card.querySelector('.open-btn');
-      btn && btn.click();
-    });
-    card.addEventListener('pointerdown', function() {
-      this.style.transform = 'scale(.97)';
-      setTimeout(() => this.style.transform = '', 120);
-    });
-  });
-
-  document.getElementById('m-live').textContent = tools.filter(t => t.status === 'live' && t.enabled).length;
-  document.getElementById('m-total').textContent = tools.filter(t => t.enabled).length;
-}
-
-/* ── SETTINGS PANEL ─────────────────────────────────── */
-function openSettings() {
-  renderSpList();
-  document.getElementById('settingsPanel').classList.add('open');
-  document.getElementById('overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeSettings() {
-  document.getElementById('settingsPanel').classList.remove('open');
-  document.getElementById('overlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-function renderSpList() {
-  const list = document.getElementById('spList');
-  list.innerHTML = '';
-  tools.forEach((t, i) => {
-    const div = document.createElement('div');
-    div.className = 'sp-item';
-    div.draggable = true;
-    div.dataset.id = t.id;
-    div.dataset.spIdx = i;
-    div.innerHTML = `
-      <span class="sp-drag">⠿</span>
-      <span class="sp-icon">${t.icon}</span>
-      <span class="sp-name">${t.name}</span>
-      <span class="sp-status">${t.status.toUpperCase()}</span>
-      <label class="toggle">
-        <input type="checkbox" ${t.enabled ? 'checked' : ''} data-id="${t.id}" />
-        <div class="toggle-track"></div>
-      </label>`;
-    list.appendChild(div);
-  });
-
-  let dragSrc = null;
-  list.querySelectorAll('.sp-item').forEach(item => {
-    item.addEventListener('dragstart', e => {
-      dragSrc = item;
-      setTimeout(() => item.classList.add('dragging-sp'), 0);
-      e.dataTransfer.effectAllowed = 'move';
-    });
-    item.addEventListener('dragend', () => {
-      item.classList.remove('dragging-sp');
-      list.querySelectorAll('.sp-item').forEach(i => i.classList.remove('drag-over-sp'));
-    });
-    item.addEventListener('dragover', e => {
-      e.preventDefault();
-      if (item !== dragSrc) {
-        list.querySelectorAll('.sp-item').forEach(i => i.classList.remove('drag-over-sp'));
-        item.classList.add('drag-over-sp');
-      }
-    });
-    item.addEventListener('drop', e => {
-      e.preventDefault();
-      if (item === dragSrc) return;
-      item.classList.remove('drag-over-sp');
-      const fromId = dragSrc.dataset.id;
-      const toId   = item.dataset.id;
-      const fromI  = tools.findIndex(t => t.id === fromId);
-      const toI    = tools.findIndex(t => t.id === toId);
-      const [moved] = tools.splice(fromI, 1);
-      tools.splice(toI, 0, moved);
-      renderSpList();
-    });
-  });
-}
-
-function saveSettings() {
-  document.querySelectorAll('#spList .toggle input').forEach(inp => {
-    const t = tools.find(x => x.id === inp.dataset.id);
-    if (t) t.enabled = inp.checked;
-  });
-  saveConfig(tools);
-  renderGrid();
-  closeSettings();
-  showToast('Settings saved ✓');
-}
-
-/* ── TOAST ──────────────────────────────────────────── */
-let toastT;
-function showToast(msg) {
-  const el = document.getElementById('toast');
-  clearTimeout(toastT);
-  el.textContent = msg;
-  el.classList.add('show');
-  toastT = setTimeout(() => el.classList.remove('show'), 2500);
-}
-
-/* ── INIT ───────────────────────────────────────────── */
-renderGrid();
-
-/* ═══════════════════════════════════════════════════════════
-   PWA SYSTEM — Production Grade
-   ═══════════════════════════════════════════════════════════ */
-
-/* ── SERVICE WORKER REGISTRATION + UPDATE HANDLING ──────── */
-let swRegistration = null;
-
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', async () => {
-    try {
-      swRegistration = await navigator.serviceWorker.register('/sw.js', {
-        scope: '/',
-        updateViaCache: 'none'
-      });
-      console.log('[PWA] Service Worker registered:', swRegistration.scope);
-
-      /* Proactively check for SW updates */
-      swRegistration.update().catch(() => {});
-
-      /* New SW already waiting (e.g. user navigated back) */
-      if (swRegistration.waiting) showUpdateBanner();
-
-      /* New SW found during this session */
-      swRegistration.addEventListener('updatefound', () => {
-        const newSW = swRegistration.installing;
-        if (!newSW) return;
-        newSW.addEventListener('statechange', () => {
-          if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
-            showUpdateBanner();
-          }
-        });
-      });
-
-      /* After skipWaiting, reload so new SW takes over */
-      let refreshing = false;
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
-        if (!refreshing) { refreshing = true; window.location.reload(); }
-      });
-
-    } catch (err) {
-      console.warn('[PWA] SW registration failed:', err);
-    }
-  });
-}
-
-/* ── UPDATE BANNER ───────────────────────────────────────── */
-function showUpdateBanner() {
-  const banner = document.getElementById('updateBanner');
-  if (banner) setTimeout(() => banner.classList.add('show'), 600);
-}
-
-document.getElementById('updateBtn')?.addEventListener('click', () => {
-  document.getElementById('updateBanner')?.classList.remove('show');
-  if (swRegistration?.waiting) {
-    swRegistration.waiting.postMessage({ type: 'SKIP_WAITING' });
-  }
-});
-
-/* ── INSTALL PROMPT SYSTEM ───────────────────────────────── */
-let deferredPrompt  = null;
-const DISMISS_KEY   = 'ampkart_install_dismissed_ts';
-
-function isStandalone() {
-  return window.matchMedia('(display-mode: standalone)').matches ||
-         window.navigator.standalone === true;
-}
-
-function wasDismissedRecently() {
-  const ts = localStorage.getItem(DISMISS_KEY);
-  return ts && (Date.now() - parseInt(ts)) < 3 * 24 * 60 * 60 * 1000;
-}
-
-function shouldShowInstall() {
-  return !isStandalone() && !wasDismissedRecently();
-}
-
-function showInstallUI() {
-  if (!shouldShowInstall()) return;
-  document.getElementById('installAppBtn').style.display = 'flex';
-  setTimeout(() => document.getElementById('installBanner')?.classList.add('show'), 1200);
-}
-
-function hideInstallUI() {
-  document.getElementById('installAppBtn').style.display = 'none';
-  document.getElementById('installBanner')?.classList.remove('show');
-}
-
-async function triggerInstall() {
-  if (!deferredPrompt) return;
-  hideInstallUI();
-  deferredPrompt.prompt();
-  const { outcome } = await deferredPrompt.userChoice;
-  console.log('[PWA] Install outcome:', outcome);
-  deferredPrompt = null;
-  if (outcome === 'accepted') {
-    showToast('Installing AMP KART… ✓');
+/* ── LIVE MULTIPLIER CHIP ── */
+document.getElementById('dpInput').addEventListener('input', function () {
+  const dp = parseFloat(this.value);
+  const chip = document.getElementById('multiplierChip');
+  const chipMult = document.getElementById('chipMult');
+  if (!isNaN(dp) && dp > 0) {
+    const m = getMultiplier(dp);
+    chipMult.textContent = m + 'x';
+    chip.classList.add('show');
   } else {
-    localStorage.setItem(DISMISS_KEY, Date.now().toString());
+    chip.classList.remove('show');
   }
+});
+
+/* ── BREAKDOWN TOGGLE ── */
+function toggleBreakdown() {
+  const body  = document.getElementById('bkBody');
+  const arrow = document.getElementById('bkArrow');
+  const isOpen = !body.classList.contains('collapsed');
+  if (isOpen) { body.classList.add('collapsed'); arrow.classList.replace('open','closed'); }
+  else        { body.classList.remove('collapsed'); arrow.classList.replace('closed','open'); }
 }
 
-/* The key event — Chrome fires this when install criteria are met */
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  console.log('[PWA] beforeinstallprompt captured ✓');
-  showInstallUI();
+/* ── MAIN CALCULATE ── */
+function calculate() {
+  const dpEl  = document.getElementById('dpInput');
+  const errEl = document.getElementById('errorMsg');
+  const btn   = document.getElementById('calcBtn');
+
+  const dp = parseFloat(dpEl.value);
+  if (!dpEl.value || isNaN(dp) || dp <= 0) {
+    dpEl.classList.add('error');
+    errEl.classList.add('show');
+    dpEl.focus();
+    setTimeout(() => { dpEl.classList.remove('error'); errEl.classList.remove('show'); }, 3000);
+    return;
+  }
+  dpEl.classList.remove('error');
+  errEl.classList.remove('show');
+
+  btn.classList.add('pulse');
+  setTimeout(() => btn.classList.remove('pulse'), 300);
+
+  /* STEP 1 — multiplier */
+  const mult = getMultiplier(dp);
+
+  /* STEP 2 — base price → psychological round */
+  const raw  = dp * mult;
+  const recPrice = psychRound(raw);
+
+  /* STEP 3 — 3 price outputs */
+  const lowPrice  = psychRound(recPrice * 0.95);
+  const highPrice = psychRound(recPrice * 1.10);
+
+  /* STEP 4 — breakdown from recommended price */
+  const bProduct  = Math.round(recPrice * 0.44);
+  const bDelivery = Math.round(recPrice * 0.18);
+  const bOther    = Math.round(recPrice * 0.09);
+  const bRTO      = Math.round(recPrice * 0.08);
+  const bDonation = Math.round(recPrice * 0.01);
+  const bProfitAmt = Math.round(recPrice * 0.20);
+  const bTotal    = bProduct + bDelivery + bOther + bRTO + bDonation;
+
+  /* STEP 5 — risk check on profit amount */
+  const profit = bProfitAmt;
+
+  /* ── POPULATE DOM ── */
+  document.getElementById('rRecPrice').textContent  = fmt(recPrice);
+  document.getElementById('rProfit').textContent    = fmt(profit);
+  document.getElementById('rLowPrice').textContent  = fmt(lowPrice);
+  document.getElementById('rLowPct').textContent    = fmt(lowPrice);
+  document.getElementById('rHighPrice').textContent = fmt(highPrice);
+  document.getElementById('rHighPct').textContent   = fmt(highPrice);
+
+  document.getElementById('bProduct').textContent  = fmt(bProduct);
+  document.getElementById('bDelivery').textContent = fmt(bDelivery);
+  document.getElementById('bOther').textContent    = fmt(bOther);
+  document.getElementById('bRTO').textContent      = fmt(bRTO);
+  document.getElementById('bDonation').textContent = fmt(bDonation);
+  document.getElementById('bTotal').textContent    = fmt(bTotal);
+  document.getElementById('bProfit').textContent   = fmt(profit);
+
+  /* margin bar: map ₹0–₹200 → 0%–100% */
+  const barW = Math.min(100, Math.round((profit / 200) * 100));
+  const fill  = document.getElementById('mbarFill');
+  fill.style.width = barW + '%';
+  document.getElementById('mbarLabel').textContent = fmt(profit) + ' profit';
+
+  /* risk badge + pill */
+  const badge  = document.getElementById('riskBadge');
+  const pill   = document.getElementById('riskPill');
+  const rlabel = document.getElementById('riskLabel');
+  const rdesc  = document.getElementById('riskDesc');
+  const remoji = document.getElementById('riskEmoji');
+
+  badge.className = 'risk-badge';
+  pill.className  = 'rec-risk-pill';
+
+  if (profit < 70) {
+    badge.classList.add('risk'); pill.classList.add('risk');
+    pill.textContent   = '⚠️ LOW PROFIT — RISKY';
+    rlabel.textContent = '⚠️ Low Profit — Risky';
+    remoji.textContent = '🔴';
+    rdesc.textContent  = `Only ${fmt(profit)} profit — below ₹70 threshold. Consider raising price.`;
+    fill.style.background = 'var(--red)';
+  } else if (profit <= 120) {
+    badge.classList.add('warn'); pill.classList.add('warn');
+    pill.textContent   = '✅ SAFE';
+    rlabel.textContent = '✅ Safe';
+    remoji.textContent = '🟡';
+    rdesc.textContent  = `${fmt(profit)} profit — within safe range (₹70–₹120).`;
+    fill.style.background = 'var(--warn)';
+  } else {
+    badge.classList.add('safe'); pill.classList.add('safe');
+    pill.textContent   = '💪 STRONG';
+    rlabel.textContent = '💪 Strong Profit';
+    remoji.textContent = '🟢';
+    rdesc.textContent  = `${fmt(profit)} profit — excellent! Above ₹120 target.`;
+    fill.style.background = 'var(--green)';
+  }
+
+  /* show results */
+  document.getElementById('emptyState').style.display = 'none';
+  const res = document.getElementById('resultSection');
+  res.classList.add('show');
+  setTimeout(() => res.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+}
+
+/* ENTER KEY */
+document.getElementById('dpInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') calculate();
 });
-
-/* Header button */
-document.getElementById('installAppBtn').addEventListener('click', triggerInstall);
-
-/* Bottom banner install button */
-document.getElementById('bannerInstallBtn')?.addEventListener('click', triggerInstall);
-
-/* Bottom banner dismiss */
-document.getElementById('bannerDismissBtn')?.addEventListener('click', () => {
-  hideInstallUI();
-  localStorage.setItem(DISMISS_KEY, Date.now().toString());
-});
-
-/* App installed callback */
-window.addEventListener('appinstalled', () => {
-  hideInstallUI();
-  deferredPrompt = null;
-  showToast('AMP KART installed! ✓');
-  console.log('[PWA] App installed ✓');
-});
-
-/* Standalone mode — hide all install prompts */
-if (isStandalone()) hideInstallUI();
-
-
 </script>
 </body>
 </html>
