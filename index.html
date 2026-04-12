@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -423,6 +422,17 @@
       letter-spacing: .3px; transition: var(--ease);
     }
     .btn-update:hover { background: var(--yd); }
+    .btn-update-dismiss {
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      color: rgba(255,255,255,.5);
+      font-size: 14px; width: 26px; height: 26px;
+      border-radius: 6px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: var(--ease); flex-shrink: 0; padding: 0;
+      font-family: var(--f);
+    }
+    .btn-update-dismiss:hover { background: rgba(255,255,255,.18); color: var(--wht); }
 
     @media(max-width:400px) {
       .install-banner { padding: 12px 14px; gap: 10px; }
@@ -537,6 +547,7 @@
 <div class="update-banner" id="updateBanner" role="alert">
   <span class="update-banner-text">🔄 New version available!</span>
   <button class="btn-update" id="updateBtn">Update</button>
+  <button class="btn-update-dismiss" id="updateDismissBtn" aria-label="Dismiss update">✕</button>
 </div>
 
 <!-- ── SCRIPT ──────────────────────────────────────────── -->
@@ -810,16 +821,33 @@ if ('serviceWorker' in navigator) {
 }
 
 /* ── UPDATE BANNER ───────────────────────────────────────── */
+const UPDATE_SHOWN_KEY = 'ampkart_update_shown';
+
 function showUpdateBanner() {
+  /* Show only once per session — prevents re-showing on every reload */
+  if (sessionStorage.getItem(UPDATE_SHOWN_KEY)) return;
   const banner = document.getElementById('updateBanner');
-  if (banner) setTimeout(() => banner.classList.add('show'), 600);
+  if (banner) {
+    sessionStorage.setItem(UPDATE_SHOWN_KEY, '1');
+    setTimeout(() => banner.classList.add('show'), 600);
+  }
+}
+
+function hideUpdateBanner() {
+  document.getElementById('updateBanner')?.classList.remove('show');
 }
 
 document.getElementById('updateBtn')?.addEventListener('click', () => {
-  document.getElementById('updateBanner')?.classList.remove('show');
+  hideUpdateBanner();
   if (swRegistration?.waiting) {
     swRegistration.waiting.postMessage({ type: 'SKIP_WAITING' });
   }
+});
+
+document.getElementById('updateDismissBtn')?.addEventListener('click', () => {
+  hideUpdateBanner();
+  /* Mark as dismissed for this session so it won't re-appear */
+  sessionStorage.setItem(UPDATE_SHOWN_KEY, 'dismissed');
 });
 
 /* ── INSTALL PROMPT SYSTEM ───────────────────────────────── */

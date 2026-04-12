@@ -3,7 +3,7 @@
    Strategy: Cache-First for assets, Network-First for HTML
    ═══════════════════════════════════════════════════════════ */
 
-const SW_VERSION   = 'v4';
+const SW_VERSION   = 'v5';
 const CACHE_STATIC = `ampkart-static-${SW_VERSION}`;
 const CACHE_PAGES  = `ampkart-pages-${SW_VERSION}`;
 const CACHE_IMG    = `ampkart-images-${SW_VERSION}`;
