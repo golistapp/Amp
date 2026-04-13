@@ -41,12 +41,12 @@
       --y:    #FFD600;
       --yd:   #C9AC00;
       --yg:   rgba(255,214,0,.10);
-      --blk:  #000000;
+      --blk:  #362900;
       --wht:  #FFFFFF;
       --blu:  #1E3A8A;
       --bg:   #EBEBEE;
       --card: #FFFFFF;
-      --bdr:  #DDDFE8;
+      --bdr:  #000000;
       --txt:  #0D0F14;
       --sub:  #6B7280;
       --r:    14px;
@@ -165,7 +165,7 @@
     /* ── TOOL CARD ──────────────────────────────────── */
     .tc {
       background: var(--card);
-      border: 1.5px solid var(--bdr);
+      border: .5px solid var(--bdr);
       border-radius: var(--r);
       padding: 16px 14px 14px;
       display: flex; flex-direction: column; gap: 11px;
@@ -543,12 +543,6 @@
   </div>
 </div>
 
-<!-- ── PWA UPDATE BANNER ───────────────────────────────── -->
-<div class="update-banner" id="updateBanner" role="alert">
-  <span class="update-banner-text">🔄 New version available!</span>
-  <button class="btn-update" id="updateBtn">Update</button>
-  <button class="btn-update-dismiss" id="updateDismissBtn" aria-label="Dismiss update">✕</button>
-</div>
 
 <!-- ── SCRIPT ──────────────────────────────────────────── -->
 <script>
@@ -575,12 +569,15 @@ const TOOLS_DEFAULT = [
     icon:`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255, 215, 0, 0.1)"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h.01M18 14h.01M14 18h.01M18 18h.01"/></g><g stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h.01M18 14h.01M14 18h.01M18 18h.01"/></g></svg>`, 
     ic:'ig', url:'/qr.html', status:'live', enabled:true 
   },
-  { 
-    id:'profit', 
-    name:'Profit Analyzer', 
-    icon:`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255, 215, 0, 0.1)"><rect x="10" y="10" width="4" height="10" rx="1"/><rect x="17" y="4" width="4" height="16" rx="1"/><rect x="3" y="16" width="4" height="4" rx="1"/></g><g stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><rect x="10" y="10" width="4" height="10" rx="1"/><rect x="17" y="4" width="4" height="16" rx="1"/><rect x="3" y="16" width="4" height="4" rx="1"/></g></svg>`, 
-    ic:'io', url:'/profit.html', status:'beta', enabled:true 
-  },
+ { 
+  id: 'profit', 
+  name: 'Courier Calculator', 
+   icon:`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255, 215, 0, 0.1)"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></g><g stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></g></svg>`, 
+   ic: 'io', 
+  url: '/eniva.html', 
+  status: 'live', 
+  enabled: true 
+},
   { 
     id:'orders', 
     name:'Order Tracker', 
